@@ -1,28 +1,43 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-function App() {
-  const [message, setMessage] = useState("Loading...");
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Students from "./pages/Students";
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/health")
-      .then((response) => {
-        setMessage(response.data.status);
-      })
-      .catch((error) => {
-        console.error(error);
-        setMessage("Cannot connect to backend");
-      });
-  }, []);
+import ProtectedRoute from "./components/ProtectedRoute";
 
-  return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
-      <h1>Student Management System</h1>
+export default function App() {
 
-      <h2>{message}</h2>
-    </div>
-  );
+    return (
+
+        <Routes>
+
+            <Route path="/" element={<Navigate to="/login" />} />
+
+            <Route path="/login" element={<Login />} />
+
+            <Route path="/register" element={<Register />} />
+
+            <Route
+                path="/dashboard"
+                element={
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
+                }
+            />
+
+            <Route
+                path="/students"
+                element={
+                    <ProtectedRoute>
+                        <Students />
+                    </ProtectedRoute>
+                }
+            />
+
+        </Routes>
+
+    );
 }
-
-export default App;
