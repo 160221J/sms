@@ -120,6 +120,8 @@ Legend: **Language** = Go. **SE** = software engineering. **SMS** = what lands i
 
 ### Week 01 — Software engineering, Go, toolchain, Git
 
+**Day 1 slides:** [docs/slides/week-01-day-01.html](docs/slides/week-01-day-01.html) · [presenter notes](docs/slides/week-01-day-01-notes.md)
+
 **Language / SE**
 
 - What software engineering is: requirements → design → implement → test → review
