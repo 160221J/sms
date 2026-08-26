@@ -1,0 +1,4 @@
+# Built binaries from `go build` — never commit these
+hello
+hello.exe
+*.exe

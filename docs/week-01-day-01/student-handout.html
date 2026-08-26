@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Day 1 student handout — Epic Learn Go</title>
+  <style>
+    :root { --ink:#14202b; --teal:#0b6e68; --muted:#4d5d6b; --line:#d8cfc2; --code:#10212c; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto;
+      max-width: 900px;
+      padding: 28px 32px 48px;
+      font-family: "Segoe UI", Calibri, system-ui, sans-serif;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 16px; color: var(--teal); margin: 22px 0 8px; letter-spacing: .04em; text-transform: uppercase; }
+    .sub { color: var(--muted); margin: 0 0 16px; }
+    pre {
+      background: var(--code);
+      color: #e8f2ef;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      overflow: auto;
+      font-family: Consolas, "Liberation Mono", monospace;
+    }
+    ul { margin: 6px 0; padding-left: 18px; }
+    li { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+    th { background: #eef6f5; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    footer { margin-top: 18px; font-size: 12px; color: var(--muted); }
+    @media print {
+      body { padding: 12px; }
+      pre { white-space: pre-wrap; }
+      h2 { break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Week 1, Day 1 — student handout</h1>
+  <p class="sub">Epic Learn · Go Programming Master Course · Umesh Indrajith · Keep this sheet. SMS starts week 4.</p>
+
+  <h2>Today’s outcomes</h2>
+  <ul>
+    <li>Explain software engineering in two sentences (requirements → design → implement → test → review).</li>
+    <li>Say why we use Go for a backend API course.</li>
+    <li>Go 1.25 + VS Code + <code>gofmt</code> on save.</li>
+    <li><code>Hello, Epic Learn</code> on GitHub.</li>
+  </ul>
+
+  <h2>Install (Ubuntu). Not apt.</h2>
+  <p>Filename must match <a href="https://go.dev/dl/">go.dev/dl</a> on the day (1.25.0, 1.25.1, …). Windows: do this <strong>inside WSL Ubuntu</strong>, not PowerShell.</p>
+<pre>wget https://go.dev/dl/go1.25.0.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go
+sudo tar -C /usr/local -xzf go1.25.0.linux-amd64.tar.gz
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+source ~/.bashrc
+go version</pre>
+
+  <h2>Folder + first program</h2>
+<pre>mkdir -p ~/epic-go/hello
+cd ~/epic-go/hello</pre>
+  <p>VS Code: File → Open Folder → <code>~/epic-go/hello</code>. Extension: <strong>Go</strong> (Go Team at Google). Command Palette → <strong>Go: Install/Update Tools</strong>. Format on save: User Settings JSON:</p>
+<pre>{
+  "editor.formatOnSave": true,
+  "[go]": {
+    "editor.defaultFormatter": "golang.go",
+    "editor.formatOnSave": true
+  }
+}</pre>
+<pre>package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, Epic Learn")
+}</pre>
+  <p>Save as <code>hello.go</code>. <strong>Println</strong> — capital P (exported name). Then:</p>
+<pre>gofmt -w hello.go
+go run hello.go
+go build -o hello hello.go
+./hello</pre>
+  <p>Do <strong>not</strong> <code>go build .</code> today (no <code>go.mod</code> until week 4).</p>
+
+  <h2>Git → GitHub</h2>
+<pre>git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+
+# .gitignore — one line: hello
+echo hello > .gitignore
+
+git init
+git add hello.go .gitignore
+git status
+git commit -m "Add Hello Epic Learn"
+git branch -M main
+git remote add origin https://github.com/YOU/hello-epic-learn.git
+git push -u origin main</pre>
+  <p>On github.com create an <strong>empty</strong> repo (no README). Then show the instructor the URL.</p>
+  <p><strong>Clone</strong> (copy a repo — you will use this for SMS in week 4):</p>
+<pre>git clone https://github.com/YOU/hello-epic-learn.git
+cd hello-epic-learn</pre>
+
+  <div class="cols">
+    <div>
+      <h2>Words to remember</h2>
+      <table>
+        <tr><th>Term</th><th>Meaning today</th></tr>
+        <tr><td>GOROOT</td><td>Where Go is installed</td></tr>
+        <tr><td>GOPATH</td><td>Old workspace — we do not use it for class projects</td></tr>
+        <tr><td>Module</td><td>A folder with go.mod — week 4</td></tr>
+        <tr><td>gofmt</td><td>Official formatter; unformatted work is returned</td></tr>
+        <tr><td>Exported</td><td>Name starts with a capital letter</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>If it breaks</h2>
+      <ul>
+        <li><code>command not found</code> → new terminal, or <code>source ~/.bashrc</code></li>
+        <li>Old <code>go version</code> → uninstall apt golang, use go.dev</li>
+        <li><code>fmt.println</code> → <code>Println</code></li>
+        <li>Push 403 → GitHub token / empty remote</li>
+        <li>Huge file on GitHub → you committed the binary; see .gitignore</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Homework (same repo)</h2>
+  <ol>
+    <li><code>why-go.md</code> — half page, your words (template from the instructor).</li>
+    <li>Proof of <code>go version</code> (screenshot or paste).</li>
+  </ol>
+  <footer>Epic Learn Education · epiclearneducation.com · 074 1200 659 · Print this page and the lab sheet.</footer>
+</body>
+</html>
