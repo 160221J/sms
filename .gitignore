@@ -30,3 +30,5 @@ Thumbs.db
 # PDF generation temp
 # =========================
 docs/week-01-day-01/.pdf-html/
+__pycache__/
+*.pyc
