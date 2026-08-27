@@ -204,10 +204,25 @@
     .center {
       justify-content: center;
     }
+    @page { size: 13.333in 7.5in; margin: 0; }
     @media print {
-      body { background: white; }
+      html, body, .deck, .slides {
+        height: auto !important;
+        overflow: visible !important;
+        background: white !important;
+      }
       .notes, .help, .bar { display: none !important; }
-      .slide { display: flex !important; position: relative; page-break-after: always; height: 100vh; }
+      .slide {
+        display: flex !important;
+        position: relative !important;
+        inset: auto !important;
+        height: 7.5in;
+        width: 13.333in;
+        page-break-after: always;
+        break-after: page;
+        overflow: hidden;
+      }
+      .slide:last-child { page-break-after: auto; }
     }
   </style>
 </head>

@@ -120,7 +120,7 @@ Legend: **Language** = Go. **SE** = software engineering. **SMS** = what lands i
 
 ### Week 01 — Software engineering, Go, toolchain, Git
 
-**Day 1 materials (full kit):** [docs/week-01-day-01/](docs/week-01-day-01/) — slides, presenter notes, student handout, lab sheet, install, troubleshooting, homework.
+**Day 1 materials (full kit):** [docs/week-01-day-01/](docs/week-01-day-01/) — slides, presenter notes, student handout, lab sheet, install, troubleshooting, homework. **Printable PDFs:** [docs/week-01-day-01/pdf/](docs/week-01-day-01/pdf/)
 
 **Day 1 slides:** [docs/slides/week-01-day-01.html](docs/slides/week-01-day-01.html) · [presenter notes](docs/slides/week-01-day-01-notes.md)
 

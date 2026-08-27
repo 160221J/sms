@@ -25,3 +25,8 @@ Thumbs.db
 # VS Code
 # =========================
 .vscode/settings.json
+
+# =========================
+# PDF generation temp
+# =========================
+docs/week-01-day-01/.pdf-html/

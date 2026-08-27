@@ -20,7 +20,8 @@
     table { width: 100%; border-collapse: collapse; margin-top: 12px; }
     td { border: 1px solid #d8cfc2; height: 36px; padding: 6px; }
     footer { margin-top: 20px; font-size: 13px; color: #4d5d6b; }
-    @media print { .box { break-inside: avoid; } }
+    @page { size: A4; margin: 14mm; }
+    @media print { .box { break-inside: avoid; } body { padding: 0; } }
   </style>
 </head>
 <body>
