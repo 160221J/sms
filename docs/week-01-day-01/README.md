@@ -2,7 +2,7 @@
 
 Everything needed to teach and sit Day 1. **No SMS code today.**
 
-**Print these (PDFs):** [`pdf/`](pdf/)
+**Print these (PDFs):** [`pdf/`](pdf/) — every page has the Epic Learn logo header and the footer *Epic Learn Institute of Higher Education - Go Programming Master Course*.
 
 | PDF | Use |
 | --- | --- |
