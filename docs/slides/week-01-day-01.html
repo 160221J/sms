@@ -39,7 +39,7 @@
       display: none;
       position: absolute;
       inset: 0;
-      padding: 56px 72px 88px;
+      padding: 96px 72px 88px;
       background:
         radial-gradient(900px 420px at 100% -10%, rgba(11, 110, 104, 0.10), transparent 55%),
         linear-gradient(180deg, var(--paper), #efe7d9);
@@ -150,18 +150,57 @@
     }
     .demo .tag { background: var(--rust); }
     .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; align-items: start; }
+    .brand-header {
+      position: absolute;
+      top: 18px;
+      left: 56px;
+      right: 56px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2;
+    }
+    .brand-header img {
+      height: 56px;
+      width: auto;
+      display: block;
+      background: #fff;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .brand-header .session {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+    }
+    .title-slide .brand-header .session { color: #ead9a3; }
     .foot {
       position: absolute;
-      left: 72px;
-      right: 72px;
-      bottom: 28px;
+      left: 56px;
+      right: 56px;
+      bottom: 22px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 14px;
+      gap: 16px;
+      font-size: 13px;
       color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
     }
-    .title-slide .foot { color: #d8cbb8; }
+    .foot .org {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .title-slide .foot {
+      color: #d8cbb8;
+      border-top-color: rgba(255,255,255,0.25);
+    }
     .bar {
       height: 6px;
       background: #d5cdc0;
@@ -211,13 +250,14 @@
         overflow: visible !important;
         background: white !important;
       }
-      .notes, .help, .bar { display: none !important; }
+      .notes, .help, .bar, .brand-header, .foot { display: none !important; }
       .slide {
         display: flex !important;
         position: relative !important;
         inset: auto !important;
         height: 7.5in;
         width: 13.333in;
+        padding: 78px 64px 48px;
         page-break-after: always;
         break-after: page;
         overflow: hidden;
@@ -239,7 +279,7 @@
       {
         titleSlide: true,
         html: `
-          <div class="kicker">Epic Learn Education · Go Programming Master Course</div>
+          <div class="kicker">Go Programming Master Course</div>
           <h1>Week 1, Day 1</h1>
           <p class="lede">Software engineering, why Go, your toolchain, and the first program you will put on GitHub.</p>
           <p class="meta">Umesh Indrajith · BSc Eng (Hons), University of Moratuwa<br>Senior Software Engineer / Lecturer</p>
@@ -604,7 +644,7 @@ git push -u origin main</pre>
       {
         titleSlide: true,
         html: `
-          <div class="kicker">Epic Learn Education</div>
+          <div class="kicker">Go Programming Master Course</div>
           <h1>Questions.</h1>
           <p class="lede">Then open the terminal. We do not leave until <code>go version</code> works.</p>
           <p class="meta">Umesh Indrajith · Go Programming Master Course · Week 1, Day 1</p>
@@ -622,9 +662,14 @@ git push -u origin main</pre>
     slides.forEach((s, idx) => {
       const el = document.createElement("section");
       el.className = "slide" + (s.titleSlide ? " title-slide" : "") + (s.cls ? " " + s.cls : "");
-      el.innerHTML = s.html + `
+      el.innerHTML = `
+        <header class="brand-header">
+          <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+          <div class="session">Week 1 · Day 1</div>
+        </header>
+        ` + s.html + `
         <div class="foot">
-          <span>Epic Learn · Go Programming Master Course · Week 1 Day 1</span>
+          <span class="org">Epic Learn Institute of Higher Education - Go Programming Master Course</span>
           <span>${idx + 1} / ${slides.length}</span>
         </div>
         <div class="bar"><span></span></div>`;

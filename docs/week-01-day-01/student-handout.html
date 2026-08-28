@@ -32,18 +32,48 @@
     th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
     th { background: #eef6f5; }
     .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    footer { margin-top: 18px; font-size: 12px; color: var(--muted); }
-    @page { size: A4; margin: 12mm; }
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+    }
+    .brand-header img { height: 58px; width: auto; }
+    .brand-header .session {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--teal);
+      text-align: right;
+    }
+    .print-footer {
+      margin-top: 22px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+    }
+    @page { size: A4; margin: 24mm 14mm 18mm 14mm; }
     @media print {
       body { padding: 0; }
       pre { white-space: pre-wrap; }
       h2 { break-after: avoid; }
+      .brand-header, .print-footer { display: none !important; }
     }
   </style>
 </head>
 <body>
+  <header class="brand-header">
+    <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+    <div class="session">Go Programming Master Course<br>Week 1 · Day 1</div>
+  </header>
   <h1>Week 1, Day 1 — student handout</h1>
-  <p class="sub">Epic Learn · Go Programming Master Course · Umesh Indrajith · Keep this sheet. SMS starts week 4.</p>
+  <p class="sub">Umesh Indrajith · Keep this sheet. SMS starts week 4.</p>
 
   <h2>Today’s outcomes</h2>
   <ul>
@@ -135,6 +165,6 @@ cd hello-epic-learn</pre>
     <li><code>why-go.md</code> — half page, your words (template from the instructor).</li>
     <li>Proof of <code>go version</code> (screenshot or paste).</li>
   </ol>
-  <footer>Epic Learn Education · epiclearneducation.com · 074 1200 659 · Print this page and the lab sheet.</footer>
+  <p class="print-footer">Epic Learn Institute of Higher Education - Go Programming Master Course</p>
 </body>
 </html>
