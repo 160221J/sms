@@ -8,15 +8,15 @@ This session is **ideas + toolchain**. No SMS code. No slices. No REST.
 
 | Clock | Block | Slides |
 | --- | --- | --- |
-| 0:00–0:10 | Welcome, course promise, outcomes | 1–6 |
-| 0:10–0:35 | Software engineering + why Go | 7–12 |
-| 0:35–0:50 | Pinned tools, GOPATH vs modules | 13–15 |
-| 0:50–1:40 | **Live** install Go + VS Code + format on save | 14–17 |
-| 1:40–2:20 | **Live** first program, export rule, run/build/gofmt | 18–20 |
-| 2:20–3:00 | **Live** Git + GitHub | 21–23 |
-| 3:00–end | Lab checklist; collect GitHub URLs | 24–27 |
+| 0:00–0:10 | Welcome, course shape, outcomes | 1–5 |
+| 0:10–0:35 | Software engineering + why Go | 6–11 |
+| 0:35–0:50 | Pinned tools, GOPATH vs modules | 12–14 |
+| 0:50–1:40 | **Live** install Go + VS Code + format on save | 13–16 |
+| 1:40–2:20 | **Live** first program, export rule, run/build/gofmt | 17–19 |
+| 2:20–3:00 | **Live** Git + GitHub | 20–22 |
+| 3:00–end | Lab checklist; collect GitHub URLs | 23–end |
 
-If install overruns, cut stories on Why Go. **Never cut `gofmt` or the GitHub push.**
+There is **no agenda slide** and **no homework slide**. Homework stays on the student handout. If install eats time, cut Why Go stories, never cut `gofmt` or Git.
 
 ## Live demo script
 

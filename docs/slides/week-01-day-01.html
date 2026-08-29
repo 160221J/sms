@@ -111,6 +111,7 @@
       gap: 20px;
       margin-top: 8px;
     }
+    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
     .card {
       background: var(--card);
       border: 1px solid var(--line);
@@ -242,6 +243,15 @@
     .big { font-size: 34px; line-height: 1.35; max-width: 22em; margin: 0; }
     .center {
       justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .title-slide.center {
+      justify-content: center;
+    }
+    .title-slide.center h1 {
+      max-width: none;
+      font-size: 88px;
     }
     @page { size: 13.333in 7.5in; margin: 0; }
     @media print {
@@ -290,11 +300,10 @@
         html: `
           <div class="kicker">Who is teaching</div>
           <h2>Umesh Indrajith</h2>
-          <div class="grid">
+          <div class="grid three">
             <div class="card"><h3>Background</h3><p>BSc Engineering (Hons) in Electronic and Telecommunication Engineering, University of Moratuwa.</p></div>
             <div class="card"><h3>Practice</h3><p>Senior Software Engineer. You will learn how Go is used to ship backend systems, not only how the language looks.</p></div>
             <div class="card"><h3>This room</h3><p>Ask questions as we go. If the install fails, say so immediately — do not sit broken until the lab.</p></div>
-            <div class="card"><h3>Contact</h3><p>Epic Learn Education<br>epiclearneducation.com<br>074 1200 659</p></div>
           </div>
         `,
         notes: "Keep this short. Credibility, then class norms: cameras/phones, Ubuntu lab, help your neighbour during install."
@@ -307,7 +316,7 @@
             <li>Not “memorise syntax for 16 weeks, then a project at the end”.</li>
             <li>You will learn to <strong>design, build, test, review, and explain</strong> working software.</li>
             <li>Go is the language. Git, HTTP, databases, and tests are the job.</li>
-            <li>By week 16 you have a portfolio API: the Student Management System.</li>
+            <li>By week 16 you have a final project in your portfolio: the Student Management System.</li>
           </ul>
         `,
         notes: "Repeat the sentence: this is an SE course that uses Go. Juniors are hired for shipping and explaining, not for listing keywords."
@@ -316,11 +325,10 @@
         html: `
           <div class="kicker">16 weeks</div>
           <h2>The shape of the course</h2>
-          <div class="grid">
+          <div class="grid three">
             <div class="card"><h3>Weeks 1–3</h3><p>Language enough to be dangerous: types, control flow, slices, maps, first functions, Git every week.</p></div>
-            <div class="card"><h3>Weeks 4–16</h3><p>One product: SMS. Health endpoint, then students, then Postgres, then login. Ten to twelve weeks of hands-on.</p></div>
+            <div class="card"><h3>Weeks 4–16</h3><p>One product: SMS. Students, then Postgres, then login. Ten to twelve weeks of hands-on.</p></div>
             <div class="card"><h3>Why REST so early?</h3><p>So you have something to demo from week 5. We deepen functions and structs <em>inside that project</em>.</p></div>
-            <div class="card"><h3>Honest promise</h3><p>Junior backend foundation. Not Kubernetes. Not “master of cloud”.</p></div>
           </div>
         `,
         notes: "Do not oversell. Students should leave knowing SMS starts week 4–5. If someone wants cloud, that is a later conversation."
@@ -338,20 +346,6 @@
           </ul>
         `,
         notes: "Read the outcomes. Everything today maps to one of these. SMS is not today."
-      },
-      {
-        html: `
-          <div class="kicker">Agenda · about 3–3.5 hours</div>
-          <h2>How we will use the time</h2>
-          <ul>
-            <li><strong>0:00–0:50</strong> Ideas: software engineering and why Go</li>
-            <li><strong>0:50–1:40</strong> Live: install Go and set up VS Code</li>
-            <li><strong>1:40–2:20</strong> Live: first program, <code>go run</code>, <code>go build</code>, <code>gofmt</code></li>
-            <li><strong>2:20–3:00</strong> Git + GitHub</li>
-            <li><strong>3:00–end</strong> Lab: you do it, I walk the room</li>
-          </ul>
-        `,
-        notes: "If install eats time, cut Why Go stories, never cut gofmt or Git. Homework still stands."
       },
       {
         html: `
@@ -615,19 +609,7 @@ git push -u origin main</pre>
             <li>Show me the GitHub URL before you leave</li>
           </ul>
         `,
-        notes: "Checklist on the board. Pair people who are done with people who are stuck. Typical failures: PATH not reloaded, apt Go, format-on-save off, binary committed, Git identity missing."
-      },
-      {
-        html: `
-          <div class="kicker">After class</div>
-          <h2>Homework (due before next session)</h2>
-          <ul>
-            <li>Half page: <strong>Why we will use Go for the Student Management System.</strong> Your words. Submit as <code>why-go.md</code> in the same repo.</li>
-            <li>Screenshot of <code>go version</code> in the terminal. Add it to the repo or the classroom chat as instructed.</li>
-            <li>Optional: change the message to include your name, commit again, push.</li>
-          </ul>
-        `,
-        notes: "Homework is thinking, not more install. Read two aloud next week as a 5-minute opener."
+        notes: "Checklist on the board. Pair people who are done with people who are stuck. Typical failures: PATH not reloaded, apt Go, format-on-save off, binary committed, Git identity missing. Homework is on the student handout — not a slide."
       },
       {
         html: `
@@ -643,13 +625,11 @@ git push -u origin main</pre>
       },
       {
         titleSlide: true,
+        cls: "center",
         html: `
-          <div class="kicker">Go Programming Master Course</div>
-          <h1>Questions.</h1>
-          <p class="lede">Then open the terminal. We do not leave until <code>go version</code> works.</p>
-          <p class="meta">Umesh Indrajith · Go Programming Master Course · Week 1, Day 1</p>
+          <h1>Questions</h1>
         `,
-        notes: "Take three questions. Then install. Stay standing. End by collecting GitHub URLs."
+        notes: "Take questions. Then start the install lab. Stay standing. End by collecting GitHub URLs."
       }
     ];
 

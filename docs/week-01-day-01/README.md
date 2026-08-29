@@ -7,6 +7,7 @@ Everything needed to teach and sit Day 1. **No SMS code today.**
 | PDF | Use |
 | --- | --- |
 | [week-01-day-01-slides.pdf](pdf/week-01-day-01-slides.pdf) | Projector / student copy of the deck |
+| [week-01-day-01-slides.pptx](pdf/week-01-day-01-slides.pptx) | Same deck for PowerPoint |
 | [student-handout.pdf](pdf/student-handout.pdf) | Give every student |
 | [lab-sheet.pdf](pdf/lab-sheet.pdf) | Gate before they leave |
 | [week-01-day-01-notes.pdf](pdf/week-01-day-01-notes.pdf) | Your script |

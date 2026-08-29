@@ -182,6 +182,39 @@ def stamp_branding(pdf_path: Path) -> None:
     print("  branded", pdf_path.name, flush=True)
 
 
+def pdf_to_pptx(pdf_path: Path, pptx_path: Path) -> None:
+    """One PowerPoint slide per PDF page (same look as the branded deck)."""
+    import tempfile
+
+    import pymupdf
+    from pptx import Presentation
+    from pptx.util import Emu, Inches
+
+    width_in, height_in = 13.333, 7.5
+    prs = Presentation()
+    prs.slide_width = Inches(width_in)
+    prs.slide_height = Inches(height_in)
+    blank = prs.slide_layouts[6]
+    doc = pymupdf.open(pdf_path)
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        for i, page in enumerate(doc):
+            pix = page.get_pixmap(matrix=pymupdf.Matrix(2, 2), alpha=False)
+            img = tmp_path / f"slide-{i:02d}.png"
+            pix.save(str(img))
+            slide = prs.slides.add_slide(blank)
+            slide.shapes.add_picture(
+                str(img),
+                Emu(0),
+                Emu(0),
+                width=prs.slide_width,
+                height=prs.slide_height,
+            )
+    pptx_path.parent.mkdir(parents=True, exist_ok=True)
+    prs.save(str(pptx_path))
+    print("PPTX", pptx_path.name, f"{pptx_path.stat().st_size // 1024} KB", flush=True)
+
+
 def main() -> int:
     if not LOGO.exists():
         raise SystemExit(f"missing logo: {LOGO}")
@@ -211,6 +244,9 @@ def main() -> int:
     for url, dest in jobs:
         chrome_pdf(url, dest)
         stamp_branding(dest)
+
+    slides_pdf = PDF_DIR / "week-01-day-01-slides.pdf"
+    pdf_to_pptx(slides_pdf, PDF_DIR / "week-01-day-01-slides.pptx")
 
     print("Wrote", PDF_DIR)
     for p in sorted(PDF_DIR.glob("*.pdf")):
