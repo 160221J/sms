@@ -245,8 +245,11 @@ def main() -> int:
         chrome_pdf(url, dest)
         stamp_branding(dest)
 
-    slides_pdf = PDF_DIR / "week-01-day-01-slides.pdf"
-    pdf_to_pptx(slides_pdf, PDF_DIR / "week-01-day-01-slides.pptx")
+    sys.path.insert(0, str(ROOT))
+    from build_editable_pptx import build as build_editable_pptx
+
+    slides_pptx = PDF_DIR / "week-01-day-01-slides.pptx"
+    build_editable_pptx(slides_pptx)
 
     print("Wrote", PDF_DIR)
     for p in sorted(PDF_DIR.glob("*.pdf")):
