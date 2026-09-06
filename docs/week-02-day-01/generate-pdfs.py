@@ -10,10 +10,20 @@ import time
 from io import BytesIO
 from pathlib import Path
 
-import markdown
-from pypdf import PdfReader, PdfWriter
-from reportlab.lib.utils import ImageReader
-from reportlab.pdfgen import canvas
+try:
+    import markdown
+    from pypdf import PdfReader, PdfWriter
+    from reportlab.lib.utils import ImageReader
+    from reportlab.pdfgen import canvas
+except ImportError:
+    req = Path(__file__).resolve().parent / "requirements.txt"
+    sys.stderr.write(
+        "Missing Python packages. From the repo root run:\n"
+        f"  python3 -m pip install --user -r {req}\n"
+        "Then run this script again.\n"
+    )
+    raise
+
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parents[1]
