@@ -32,7 +32,16 @@ REPO = ROOT.parents[1]
 SLIDES = REPO / "docs" / "slides"
 PDF_DIR = ROOT / "pdf"
 TMP = ROOT / ".pdf-html"
-CHROME = "google-chrome"
+CHROME_CANDIDATES = (
+    "google-chrome",
+    "google-chrome-stable",
+    "chromium-browser",
+    "chromium",
+    "/opt/google/chrome/google-chrome",
+    "/usr/bin/google-chrome-stable",
+    "/usr/bin/chromium-browser",
+    "/usr/bin/chromium",
+)
 LOGO = REPO / "docs" / "branding" / "epic-learn-logo.png"
 FOOTER = "Epic Learn Institute of Higher Education - Go Programming Master Course"
 
@@ -92,13 +101,28 @@ def md_to_html(src: Path, title: str) -> Path:
     return out
 
 
+def find_chrome() -> str:
+    for name in CHROME_CANDIDATES:
+        path = shutil.which(name) if "/" not in name else (name if Path(name).exists() else None)
+        if path:
+            return path
+    raise SystemExit(
+        "No Chrome/Chromium found. PDFs need a browser.\n"
+        "Install one of:\n"
+        "  sudo apt install google-chrome-stable\n"
+        "  sudo apt install chromium-browser\n"
+        "Or build PowerPoint only (no browser):\n"
+        "  .venv-docs/bin/python docs/week-01-day-01/build_editable_pptx.py\n"
+    )
+
+
 def chrome_pdf(src_url: str, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     profile = Path(f"/tmp/chrome-pdf-profile-{dest.stem}")
     shutil.rmtree(profile, ignore_errors=True)
     profile.mkdir(parents=True, exist_ok=True)
     cmd = [
-        CHROME,
+        find_chrome(),
         "--headless=new",
         "--disable-gpu",
         "--no-sandbox",
