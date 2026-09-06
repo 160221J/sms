@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Week 2 lab sheet — Epic Learn Go</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Calibri, system-ui, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 28px;
+      color: #14202b;
+    }
+    h1 { font-size: 24px; margin-bottom: 4px; }
+    .sub { color: #4d5d6b; margin-top: 0; }
+    .box { border: 2px solid #0b6e68; border-radius: 12px; padding: 12px 16px; margin: 16px 0; }
+    label { display: block; padding: 8px 0; font-size: 17px; border-bottom: 1px solid #eee; }
+    input[type=checkbox] { width: 18px; height: 18px; margin-right: 10px; }
+    input[type=text] { width: 100%; font-size: 16px; padding: 8px; margin-top: 6px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    td { border: 1px solid #d8cfc2; height: 36px; padding: 6px; }
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid #d8cfc2;
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+    }
+    .brand-header img { height: 58px; width: auto; }
+    .brand-header .session {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #0b6e68;
+      text-align: right;
+    }
+    footer { margin-top: 20px; font-size: 13px; color: #4d5d6b; }
+    .print-footer {
+      margin-top: 16px;
+      padding-top: 10px;
+      border-top: 1px solid #d8cfc2;
+      font-size: 11px;
+      color: #4d5d6b;
+      text-align: center;
+    }
+    @page { size: A4; margin: 24mm 14mm 18mm 14mm; }
+    @media print {
+      .box { break-inside: avoid; }
+      body { padding: 0; }
+      .brand-header, .print-footer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="brand-header">
+    <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+    <div class="session">Go Programming Master Course<br>Week 2 · Day 1</div>
+  </header>
+  <h1>Lab gate — Week 2, Day 1</h1>
+  <p class="sub">Fill this and show it with your GitHub page before you leave. Name: _______________________</p>
+
+  <div class="box">
+    <strong>You are done only when every box is ticked.</strong>
+    <label><input type="checkbox" /> Worksheet sections A–D are filled (zeros, conversions, operators, runes)</label>
+    <label><input type="checkbox" /> <code>go run zeros.go</code> prints zeros and a Fahrenheit value</label>
+    <label><input type="checkbox" /> <code>go run greet.go -first Ada -last Lovelace</code> prints a full name (not a pointer)</label>
+    <label><input type="checkbox" /> <code>names/</code> has <code>go.mod</code>, <code>names.go</code>, <code>names_test.go</code></label>
+    <label><input type="checkbox" /> <code>go test</code> in <code>names/</code> is green for <code>FullName("Ada","Lovelace")</code></label>
+    <label><input type="checkbox" /> GitHub has the week 2 files, <strong>not</strong> compiled binaries</label>
+  </div>
+
+  <p><strong>GitHub URL</strong></p>
+  <input type="text" placeholder="https://github.com/yourname/hello-epic-learn  (or week02 repo)" />
+
+  <p><strong>Paste <code>go test</code> output</strong></p>
+  <input type="text" placeholder="PASS" />
+
+  <p><strong>Instructor sign-off</strong></p>
+  <table>
+    <tr><td>Seen worksheet + URL + PASS</td><td>Initials</td><td>Time</td></tr>
+    <tr><td></td><td></td><td></td></tr>
+  </table>
+
+  <footer>
+    Homework still due before next class: ten exercises in <code>exercises.md</code> + <code>FullName</code> trim tests.
+  </footer>
+  <p class="print-footer">Epic Learn Institute of Higher Education - Go Programming Master Course</p>
+</body>
+</html>

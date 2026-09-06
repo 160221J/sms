@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Week 2 student handout — Epic Learn Go</title>
+  <style>
+    :root { --ink:#14202b; --teal:#0b6e68; --muted:#4d5d6b; --line:#d8cfc2; --code:#10212c; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto;
+      max-width: 900px;
+      padding: 28px 32px 48px;
+      font-family: "Segoe UI", Calibri, system-ui, sans-serif;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 16px; color: var(--teal); margin: 22px 0 8px; letter-spacing: .04em; text-transform: uppercase; }
+    .sub { color: var(--muted); margin: 0 0 16px; }
+    pre {
+      background: var(--code);
+      color: #e8f2ef;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      overflow: auto;
+      font-family: Consolas, "Liberation Mono", monospace;
+    }
+    ul, ol { margin: 6px 0; padding-left: 18px; }
+    li { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+    th { background: #eef6f5; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+    }
+    .brand-header img { height: 58px; width: auto; }
+    .brand-header .session {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--teal);
+      text-align: right;
+    }
+    .print-footer {
+      margin-top: 22px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+    }
+    @page { size: A4; margin: 24mm 14mm 18mm 14mm; }
+    @media print {
+      body { padding: 0; }
+      pre { white-space: pre-wrap; }
+      h2 { break-after: avoid; }
+      .brand-header, .print-footer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="brand-header">
+    <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+    <div class="session">Go Programming Master Course<br>Week 2 · Day 1</div>
+  </header>
+  <h1>Week 2, Day 1 — student handout</h1>
+  <p class="sub">Umesh Indrajith · Keep this sheet. SMS still starts week 4. No slices today.</p>
+
+  <h2>Today’s outcomes</h2>
+  <ul>
+    <li><code>var</code>, <code>:=</code>, <code>const</code> (and a light look at <code>iota</code>).</li>
+    <li>Zero values: <code>0</code>, <code>""</code>, <code>false</code>, <code>nil</code>.</li>
+    <li>Explicit conversions — Go will not convert numbers for you.</li>
+    <li><code>fmt</code>, <code>strings</code>, bytes vs runes, a little <code>time</code>.</li>
+    <li>First <code>go test</code> on <code>func FullName(first, last string) string</code>.</li>
+  </ul>
+
+  <h2>Folder for today</h2>
+<pre>mkdir -p ~/epic-go/week02/names
+cd ~/epic-go/week02</pre>
+  <p>VS Code: File → Open Folder → <code>~/epic-go/week02</code>. <code>gofmt</code> on save is still required.</p>
+
+  <h2>Declare</h2>
+<pre>var campus string = "Epic Learn"   // package or function
+seats := 30                        // function only; type inferred
+seats = 31                         // already exists — use =
+const institute = "Epic Learn"     // compile-time; cannot assign later</pre>
+
+  <h2>Zero values and conversion</h2>
+<pre>var n int          // 0
+var s string       // ""
+var ok bool        // false
+year := 2026
+fmt.Println(float64(year) + 0.5)   // year + 0.5 does not compile
+fmt.Println(int(3.9))              // 3 — truncation is your problem</pre>
+
+  <h2>fmt verbs and strings</h2>
+<pre>fmt.Printf("name=%s n=%d ok=%t T=%T q=%q\n", "Ada", 1, true, 1, "Ada")
+strings.TrimSpace("  Ada  ")
+strings.ToUpper("sms")
+strings.Contains("Ada Lovelace", "Ada")</pre>
+
+  <h2>Bytes vs runes</h2>
+<pre>len("café")                      // 5  (bytes)
+utf8.RuneCountInString("café")   // 4  (letters / code points)
+utf8.RuneCountInString("සිංහල")  // 5</pre>
+  <p><code>len</code> counts bytes (15 for <code>සිංහල</code>). A <code>rune</code> is one Unicode code point. <code>සි</code> is two runes: the letter plus the vowel sign. Do not index a string with <code>s[0]</code> and call it a letter.</p>
+
+  <h2>time (preview for SMS dates)</h2>
+<pre>time.Now().Format("2006-01-02")           // layout is 2006-01-02, not YYYY-MM-DD
+time.Parse("2006-01-02", "2001-05-17")</pre>
+
+  <h2>CLI + first test</h2>
+<pre>go run greet.go -first Ada -last Lovelace
+
+cd ~/epic-go/week02/names
+go mod init epiclearn/week02    # ritual today; meaning in week 4
+go test</pre>
+  <p><code>flag.String</code> returns a pointer. Print <code>*first</code>, not <code>first</code>. <code>FullName</code> homework: <code>TrimSpace</code>, one space, no leftover spaces if a part is empty.</p>
+
+  <div class="cols">
+    <div>
+      <h2>Words to remember</h2>
+      <table>
+        <tr><th>Term</th><th>Meaning today</th></tr>
+        <tr><td>Zero value</td><td>What you get if you do not assign: 0, "", false, nil</td></tr>
+        <tr><td>:=</td><td>Declare and assign, inside a function only</td></tr>
+        <tr><td>Conversion</td><td>You write float64(n). The compiler will not guess</td></tr>
+        <tr><td>byte / rune</td><td>uint8 / int32 (a Unicode code point)</td></tr>
+        <tr><td>go test</td><td>Runs functions named Test… in *_test.go</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>If it breaks</h2>
+      <ul>
+        <li><code>:=</code> at top of file → use <code>var</code></li>
+        <li><code>int + float64</code> → convert one side</li>
+        <li>prints <code>0xc000…</code> → you forgot <code>*</code></li>
+        <li><code>go test</code> no module → <code>go mod init</code></li>
+        <li><code>YYYY-MM-DD</code> parse fails → layout is <code>2006-01-02</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Homework (before next class)</h2>
+  <ol>
+    <li>Ten items on the homework sheet: nine short answers in <code>exercises.md</code>.</li>
+    <li><code>FullName</code> + green <code>go test</code> including the trim cases.</li>
+  </ol>
+  <p class="print-footer">Epic Learn Institute of Higher Education - Go Programming Master Course</p>
+</body>
+</html>
