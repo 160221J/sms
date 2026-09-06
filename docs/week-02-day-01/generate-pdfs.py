@@ -18,9 +18,11 @@ try:
 except ImportError:
     req = Path(__file__).resolve().parent / "requirements.txt"
     sys.stderr.write(
-        "Missing Python packages. From the repo root run:\n"
-        f"  python3 -m pip install --user -r {req}\n"
-        "Then run this script again.\n"
+        "Missing Python packages. On Ubuntu do not pip-install into system Python.\n"
+        "From the repo root run:\n"
+        "  sudo apt install python3-venv python3-full\n"
+        "  ./docs/week-02-day-01/generate.sh\n"
+        f"(or: python3 -m venv .venv-docs && .venv-docs/bin/pip install -r {req})\n"
     )
     raise
 

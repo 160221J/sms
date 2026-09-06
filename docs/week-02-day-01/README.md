@@ -17,14 +17,15 @@ Everything needed to teach and sit Week 2. **No SMS code today.** Types, zero va
 | [pre-class.pdf](pdf/pre-class.pdf) | Send 2–3 days before |
 | [instructor-checklist.pdf](pdf/instructor-checklist.pdf) | Packing + URL sheet |
 
-Regenerate (once, then the generate command):
+Regenerate on Ubuntu (PEP 668 — do **not** `pip install --user` into system Python):
 
 ```bash
-python3 -m pip install --user -r docs/week-02-day-01/requirements.txt
-python3 docs/week-02-day-01/generate-pdfs.py    # needs Google Chrome (`google-chrome` on PATH)
+sudo apt install python3-venv python3-full
+# Google Chrome must be on PATH as google-chrome (for PDFs)
+./docs/week-02-day-01/generate.sh
 ```
 
-PowerPoint only (no Chrome): `python3 docs/week-02-day-01/build_editable_pptx.py`
+PowerPoint only (no Chrome): `./docs/week-02-day-01/generate.sh --pptx-only`
 
 | Who | Open / print |
 | --- | --- |
