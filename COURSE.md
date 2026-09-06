@@ -146,6 +146,10 @@ Legend: **Language** = Go. **SE** = software engineering. **SMS** = what lands i
 
 ### Week 02 — Variables, types, zero values, operators, strings
 
+**Day 1 materials (full kit):** [docs/week-02-day-01/](docs/week-02-day-01/) — slides, presenter notes, student handout, lab sheet, worksheet, troubleshooting, homework. **Printable PDFs + editable PPTX:** [docs/week-02-day-01/pdf/](docs/week-02-day-01/pdf/)
+
+**Day 1 slides:** [docs/slides/week-02-day-01.html](docs/slides/week-02-day-01.html) · [presenter notes](docs/slides/week-02-day-01-notes.md)
+
 **Language**
 
 - `var`, `:=`, `const`, iota (light)

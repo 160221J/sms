@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render Week 1 Day 1 teaching docs to PDF via headless Chrome + institute branding."""
+"""Render Week 2 Day 1 teaching docs to PDF via headless Chrome + institute branding."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ except ImportError:
         "Missing Python packages. On Ubuntu do not pip-install into system Python.\n"
         "From the repo root run:\n"
         "  sudo apt install python3-venv python3-full\n"
-        "  ./docs/week-01-day-01/generate.sh\n"
+        "  ./docs/week-02-day-01/generate.sh\n"
         f"(or: python3 -m venv .venv-docs && .venv-docs/bin/pip install -r {req})\n"
     )
     raise
@@ -112,7 +112,7 @@ def find_chrome() -> str:
         "  sudo apt install google-chrome-stable\n"
         "  sudo apt install chromium-browser\n"
         "Or build PowerPoint only (no browser):\n"
-        "  .venv-docs/bin/python docs/week-01-day-01/build_editable_pptx.py\n"
+        "  .venv-docs/bin/python docs/week-02-day-01/build_editable_pptx.py\n"
     )
 
 
@@ -218,60 +218,24 @@ def stamp_branding(pdf_path: Path) -> None:
     print("  branded", pdf_path.name, flush=True)
 
 
-def pdf_to_pptx(pdf_path: Path, pptx_path: Path) -> None:
-    """One PowerPoint slide per PDF page (same look as the branded deck)."""
-    import tempfile
-
-    import pymupdf
-    from pptx import Presentation
-    from pptx.util import Emu, Inches
-
-    width_in, height_in = 13.333, 7.5
-    prs = Presentation()
-    prs.slide_width = Inches(width_in)
-    prs.slide_height = Inches(height_in)
-    blank = prs.slide_layouts[6]
-    doc = pymupdf.open(pdf_path)
-    with tempfile.TemporaryDirectory() as tmp:
-        tmp_path = Path(tmp)
-        for i, page in enumerate(doc):
-            pix = page.get_pixmap(matrix=pymupdf.Matrix(2, 2), alpha=False)
-            img = tmp_path / f"slide-{i:02d}.png"
-            pix.save(str(img))
-            slide = prs.slides.add_slide(blank)
-            slide.shapes.add_picture(
-                str(img),
-                Emu(0),
-                Emu(0),
-                width=prs.slide_width,
-                height=prs.slide_height,
-            )
-    pptx_path.parent.mkdir(parents=True, exist_ok=True)
-    prs.save(str(pptx_path))
-    print("PPTX", pptx_path.name, f"{pptx_path.stat().st_size // 1024} KB", flush=True)
-
-
 def main() -> int:
     if not LOGO.exists():
         raise SystemExit(f"missing logo: {LOGO}")
     PDF_DIR.mkdir(parents=True, exist_ok=True)
     jobs: list[tuple[str, Path]] = []
 
-    jobs.append((SLIDES.joinpath("week-01-day-01.html").as_uri(), PDF_DIR / "week-01-day-01-slides.pdf"))
+    jobs.append((SLIDES.joinpath("week-02-day-01.html").as_uri(), PDF_DIR / "week-02-day-01-slides.pdf"))
     jobs.append((ROOT.joinpath("student-handout.html").as_uri(), PDF_DIR / "student-handout.pdf"))
     jobs.append((ROOT.joinpath("lab-sheet.html").as_uri(), PDF_DIR / "lab-sheet.pdf"))
 
     md_jobs = [
-        (SLIDES / "week-01-day-01-notes.md", "Presenter notes"),
+        (SLIDES / "week-02-day-01-notes.md", "Presenter notes"),
         (ROOT / "pre-class.md", "Pre-class message"),
         (ROOT / "instructor-checklist.md", "Instructor checklist"),
-        (ROOT / "install.md", "Install Go, Git, VS Code"),
         (ROOT / "troubleshooting.md", "Troubleshooting"),
         (ROOT / "homework.md", "Homework"),
-        (ROOT / "why-go.template.md", "why-go.md template"),
-        (ROOT / "README.md", "Day 1 kit index"),
-        (REPO / "COURSE.md", "16-week curriculum"),
-        (REPO / "docs" / "sms-project-spec.md", "SMS project spec"),
+        (ROOT / "worksheet.md", "Lab worksheet"),
+        (ROOT / "README.md", "Week 2 kit index"),
     ]
     for path, title in md_jobs:
         html_path = md_to_html(path, title)
@@ -284,11 +248,11 @@ def main() -> int:
     sys.path.insert(0, str(ROOT))
     from build_editable_pptx import build as build_editable_pptx
 
-    slides_pptx = PDF_DIR / "week-01-day-01-slides.pptx"
+    slides_pptx = PDF_DIR / "week-02-day-01-slides.pptx"
     build_editable_pptx(slides_pptx)
 
     print("Wrote", PDF_DIR)
-    for p in sorted(PDF_DIR.glob("*.pdf")):
+    for p in sorted(PDF_DIR.glob("*")):
         print(f"  {p.name:40} {p.stat().st_size // 1024:5d} KB")
     return 0
 

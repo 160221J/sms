@@ -3,13 +3,22 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
-from pptx import Presentation
-from pptx.dml.color import RGBColor
-from pptx.enum.shapes import MSO_SHAPE
-from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
-from pptx.util import Inches, Pt
+try:
+    from pptx import Presentation
+    from pptx.dml.color import RGBColor
+    from pptx.enum.shapes import MSO_SHAPE
+    from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
+    from pptx.util import Inches, Pt
+except ImportError:
+    req = Path(__file__).resolve().parent / "requirements.txt"
+    sys.stderr.write(
+        "Missing python-pptx. From the repo root run:\n"
+        f"  python3 -m pip install --user -r {req}\n"
+    )
+    raise
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parents[1]

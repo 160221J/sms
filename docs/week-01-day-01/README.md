@@ -19,7 +19,15 @@ Everything needed to teach and sit Day 1. **No SMS code today.**
 | [COURSE.pdf](pdf/COURSE.pdf) | Full 16-week curriculum |
 | [sms-project-spec.pdf](pdf/sms-project-spec.pdf) | SMS capstone spec |
 
-Regenerate: `python3 docs/week-01-day-01/generate-pdfs.py` (needs Google Chrome).
+Regenerate on Ubuntu (PEP 668 — do **not** `pip install --user` into system Python):
+
+```bash
+sudo apt install python3-venv python3-full
+# Google Chrome must be on PATH as google-chrome (for PDFs)
+./docs/week-01-day-01/generate.sh
+```
+
+PowerPoint only (no Chrome): `./docs/week-01-day-01/generate.sh --pptx-only`
 
 | Who | Open / print |
 | --- | --- |
