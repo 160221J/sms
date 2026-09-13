@@ -6,6 +6,8 @@ Demo / capstone project for the Epic Learn **Go Programming Master Course**.
 - **Project spec:** [docs/sms-project-spec.md](docs/sms-project-spec.md)
 - **Week 1 teaching kit:** [docs/week-01-day-01/](docs/week-01-day-01/)
 - **Week 2 teaching kit:** [docs/week-02-day-01/](docs/week-02-day-01/)
+- **Week 3 teaching kit:** [docs/week-03-day-01/](docs/week-03-day-01/)
+- **Slides index:** [docs/slides/](docs/slides/)
 
 ## Run (week 15+)
 
