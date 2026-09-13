@@ -13,7 +13,7 @@ Everything needed to teach and sit Week 3. **No SMS code today.** Control flow, 
 | [worksheet.pdf](pdf/worksheet.pdf) | Control + slice gotcha + comma-ok (fill in class) |
 | [week-03-day-01-notes.pdf](pdf/week-03-day-01-notes.pdf) | Your script |
 | [troubleshooting.pdf](pdf/troubleshooting.pdf) | Walk the room |
-| [homework.pdf](pdf/homework.pdf) | After class — slice/map exercises |
+| [homework.pdf](pdf/homework.pdf) | After class — coding (8 functions + light algorithms) |
 | [pre-class.pdf](pdf/pre-class.pdf) | Send 2–3 days before |
 | [instructor-checklist.pdf](pdf/instructor-checklist.pdf) | Packing + URL sheet |
 
