@@ -171,6 +171,10 @@ Legend: **Language** = Go. **SE** = software engineering. **SMS** = what lands i
 
 ### Week 03 — Control flow, arrays, slices, maps (and a first real function)
 
+**Day 1 materials (full kit):** [docs/week-03-day-01/](docs/week-03-day-01/) — slides, presenter notes, student handout, lab sheet, worksheet, troubleshooting, homework. **Printable PDFs + editable PPTX:** [docs/week-03-day-01/pdf/](docs/week-03-day-01/pdf/)
+
+**Day 1 slides:** [docs/slides/week-03-day-01.html](docs/slides/week-03-day-01.html) · [presenter notes](docs/slides/week-03-day-01-notes.md)
+
 **Language**
 
 - `if`, `else`, `switch` (tagless switch)

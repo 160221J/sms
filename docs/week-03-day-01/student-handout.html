@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Week 3 student handout — Epic Learn Go</title>
+  <style>
+    :root { --ink:#14202b; --teal:#0b6e68; --muted:#4d5d6b; --line:#d8cfc2; --code:#10212c; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto;
+      max-width: 900px;
+      padding: 28px 32px 48px;
+      font-family: "Segoe UI", Calibri, system-ui, sans-serif;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 16px; color: var(--teal); margin: 22px 0 8px; letter-spacing: .04em; text-transform: uppercase; }
+    .sub { color: var(--muted); margin: 0 0 16px; }
+    pre {
+      background: var(--code);
+      color: #e8f2ef;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      overflow: auto;
+      font-family: Consolas, "Liberation Mono", monospace;
+    }
+    ul, ol { margin: 6px 0; padding-left: 18px; }
+    li { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+    th { background: #eef6f5; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+    }
+    .brand-header img { height: 58px; width: auto; }
+    .brand-header .session {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--teal);
+      text-align: right;
+    }
+    .print-footer {
+      margin-top: 22px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+    }
+    @page { size: A4; margin: 24mm 14mm 18mm 14mm; }
+    @media print {
+      body { padding: 0; }
+      pre { white-space: pre-wrap; }
+      h2 { break-after: avoid; }
+      .brand-header, .print-footer { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="brand-header">
+    <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+    <div class="session">Go Programming Master Course<br>Week 3 · Day 1</div>
+  </header>
+  <h1>Week 3, Day 1 — student handout</h1>
+  <p class="sub">Umesh Indrajith · Keep this sheet. Two labs today. SMS still starts week 4.</p>
+
+  <h2>Today’s outcomes</h2>
+  <ul>
+    <li><code>if</code>, short statement, <code>switch</code> (including tagless).</li>
+    <li><code>for</code> / <code>range</code> / <code>break</code> / <code>continue</code>.</li>
+    <li>Slices: <code>len</code>, <code>cap</code>, <code>make</code>, <code>append</code>, backing-array gotcha.</li>
+    <li>Maps: <code>make</code>, comma-ok, range (order not promised).</li>
+    <li>Functions enough to ship helpers; <code>return x, err</code> as a copyable pattern.</li>
+    <li>Green tests for <code>Contains</code>, <code>Unique</code>, <code>Freq</code>.</li>
+  </ul>
+
+  <h2>Folder for today</h2>
+<pre>mkdir -p ~/epic-go/week03/slicekit
+cd ~/epic-go/week03</pre>
+  <p>VS Code: File → Open Folder → <code>~/epic-go/week03</code>. <code>gofmt</code> on save is still required.</p>
+
+  <h2>Control flow</h2>
+<pre>if n := len(name); n == 0 {
+    fmt.Println("empty")
+}
+
+switch day {
+case "Sat", "Sun":
+    fmt.Println("weekend")
+default:
+    fmt.Println("weekday")
+}
+
+for i, v := range courses {
+    fmt.Println(i, v)
+}</pre>
+
+  <h2>Slices</h2>
+<pre>s := make([]string, 0, 8)
+s = append(s, "SE")          // always assign the result
+
+a := []int{10, 20, 30, 40}
+b := a[:2]
+b = append(b, 99)            // may change a[2] — shared backing array</pre>
+  <p>Slice header = pointer + length + capacity. Need independence? Copy into a new backing array.</p>
+
+  <h2>Maps</h2>
+<pre>count := make(map[string]int)
+count["SE"]++
+v, ok := count["SE"]         // comma-ok: missing vs present
+if !ok { /* not found */ }
+delete(count, "SE")</pre>
+  <p>Writing to a <code>nil</code> map panics. Range order is randomised — do not assert print order in tests.</p>
+
+  <h2>Lab package</h2>
+<pre>cd ~/epic-go/week03/slicekit
+go mod init epiclearn/week03
+# implement Contains, Unique, Freq + tests
+go test</pre>
+
+  <div class="cols">
+    <div>
+      <h2>Words to remember</h2>
+      <table>
+        <tr><th>Term</th><th>Meaning today</th></tr>
+        <tr><td>Backing array</td><td>Storage underneath one or more slices</td></tr>
+        <tr><td>cap</td><td>How far append can grow without reallocating</td></tr>
+        <tr><td>Comma-ok</td><td><code>v, ok := m[k]</code> — was the key present?</td></tr>
+        <tr><td>Tagless switch</td><td><code>switch { case cond: }</code></td></tr>
+        <tr><td>_</td><td>Blank identifier — intentionally unused</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>If it breaks</h2>
+      <ul>
+        <li><code>if score</code> → need a bool comparison</li>
+        <li><code>append</code> ignored → assign: <code>s = append(s, x)</code></li>
+        <li>nil map write → <code>make</code> first</li>
+        <li>flaky map test → assert keys, not print order</li>
+        <li><code>go test</code> no module → <code>go mod init</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Homework (before next class)</h2>
+  <ol>
+    <li>Eight short answers in <code>exercises.md</code>.</li>
+    <li>Harden <code>Contains</code> / <code>Unique</code> / <code>Freq</code> with the extra cases on the homework sheet.</li>
+    <li>Optional: five lines on Effective Go slices/maps.</li>
+  </ol>
+  <p class="print-footer">Epic Learn Institute of Higher Education - Go Programming Master Course</p>
+</body>
+</html>
