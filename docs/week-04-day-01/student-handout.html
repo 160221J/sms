@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Week 4 student handout — Epic Learn Go</title>
+  <style>
+    :root { --ink:#14202b; --teal:#0b6e68; --muted:#4d5d6b; --line:#d8cfc2; --code:#10212c; }
+    * { box-sizing: border-box; }
+    body { margin: 0 auto; max-width: 900px; padding: 28px 32px 48px; font-family: "Segoe UI", Calibri, system-ui, sans-serif; color: var(--ink); line-height: 1.35; }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 16px; color: var(--teal); margin: 22px 0 8px; letter-spacing: .04em; text-transform: uppercase; }
+    .sub { color: var(--muted); margin: 0 0 16px; }
+    pre { background: var(--code); color: #e8f2ef; padding: 12px 14px; border-radius: 10px; font-size: 13px; overflow: auto; font-family: Consolas, "Liberation Mono", monospace; }
+    ul, ol { margin: 6px 0; padding-left: 18px; }
+    li { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+    th { background: #eef6f5; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .brand-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 18px; }
+    .brand-header img { height: 58px; width: auto; }
+    .brand-header .session { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--teal); text-align: right; }
+    .print-footer { margin-top: 22px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); text-align: center; }
+    @page { size: A4; margin: 24mm 14mm 18mm 14mm; }
+    @media print { body { padding: 0; } pre { white-space: pre-wrap; } .brand-header, .print-footer { display: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="brand-header">
+    <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+    <div class="session">Go Programming Master Course<br>Week 4 · Day 1</div>
+  </header>
+  <h1>Week 4, Day 1 — student handout</h1>
+  <p class="sub">Umesh Indrajith · SMS kickoff. No HTTP / Gin today.</p>
+
+  <h2>Today’s outcomes</h2>
+  <ul>
+    <li>Package vs module; imports; <code>internal/</code> boundary.</li>
+    <li><code>go mod init</code> and reading <code>go.mod</code>.</li>
+    <li>Scaffold the SMS <code>backend/</code> tree.</li>
+    <li><code>go run ./cmd/server</code> prints <code>sms starting</code>.</li>
+    <li>README + PR. <code>.env</code> never committed.</li>
+  </ul>
+
+  <h2>Scaffold</h2>
+<pre>mkdir -p ~/epic-go/sms/backend && cd ~/epic-go/sms/backend
+go mod init student-management-system
+mkdir -p cmd/server internal/{config,handlers,repository,models,routes,middleware,database,utils}
+# add .gitkeep in each empty internal folder
+</pre>
+
+  <h2>cmd/server/main.go</h2>
+<pre>package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("sms starting")
+}
+</pre>
+<pre>gofmt -w cmd/server/main.go
+go run ./cmd/server</pre>
+
+  <h2>Target tree</h2>
+<pre>backend/
+  go.mod
+  README.md
+  .gitignore
+  .env.example
+  cmd/server/main.go
+  internal/config/
+  internal/handlers/
+  internal/repository/
+  internal/models/
+  internal/routes/
+  internal/middleware/
+  internal/database/
+  internal/utils/</pre>
+
+  <div class="cols">
+    <div>
+      <h2>Words</h2>
+      <table>
+        <tr><th>Term</th><th>Meaning</th></tr>
+        <tr><td>Module</td><td>Defined by go.mod; import prefix</td></tr>
+        <tr><td>Package</td><td>One folder, one package name</td></tr>
+        <tr><td>internal/</td><td>Compiler boundary for app code</td></tr>
+        <tr><td>cmd/</td><td>Executables / main packages</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>If it breaks</h2>
+      <ul>
+        <li>not in std → create go.mod</li>
+        <li>wrong folder → cd backend/</li>
+        <li>empty dirs missing → .gitkeep</li>
+        <li>.env in git → gitignore + rm --cached</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Homework</h2>
+  <p>Finish the skeleton as a <strong>GitHub PR</strong> before next class. No Gin yet. Details: <code>homework.md</code>.</p>
+  <p class="print-footer">Epic Learn Institute of Higher Education - Go Programming Master Course</p>
+</body>
+</html>

@@ -198,6 +198,10 @@ Week 3 is dense. Prefer **two labs** (control+slice, then maps) over rushing map
 
 ### Week 04 — Modules, packages, project shape, **SMS kickoff**
 
+**Day 1 materials (full kit):** [docs/week-04-day-01/](docs/week-04-day-01/) — slides, presenter notes, student handout, lab sheet, troubleshooting, homework. **Printable PDFs + editable PPTX:** [docs/week-04-day-01/pdf/](docs/week-04-day-01/pdf/)
+
+**Day 1 slides:** [docs/slides/week-04-day-01.html](docs/slides/week-04-day-01.html) · [presenter notes](docs/slides/week-04-day-01-notes.md)
+
 Hands-on clock starts here (project week 1 of ~12).
 
 **Language / SE**

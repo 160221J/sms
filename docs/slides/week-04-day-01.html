@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 4 · Day 1 — Go Programming Master Course · Epic Learn</title>
+  <style>
+    :root {
+      --ink: #14202b;
+      --muted: #4d5d6b;
+      --paper: #f4efe6;
+      --card: #fffdf9;
+      --line: #d8cfc2;
+      --teal: #0b6e68;
+      --teal-dark: #084f4b;
+      --rust: #c24e1d;
+      --gold: #c9a227;
+      --code: #10212c;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #0e181f;
+      color: var(--ink);
+      font-family: "Segoe UI", "Calibri", "Liberation Sans", system-ui, sans-serif;
+    }
+    .deck {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .slides {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 96px 72px 88px;
+      background:
+        radial-gradient(900px 420px at 100% -10%, rgba(11, 110, 104, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--paper), #efe7d9);
+    }
+    .slide.on { display: flex; flex-direction: column; }
+    .slide.title-slide {
+      justify-content: flex-end;
+      background:
+        linear-gradient(180deg, rgba(8, 31, 36, 0.15), rgba(8, 31, 36, 0.55)),
+        linear-gradient(135deg, #0b6e68 0%, #14202b 55%, #c24e1d 140%);
+      color: #f7f1e6;
+    }
+    .kicker {
+      font-size: 15px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .title-slide .kicker { color: #ead9a3; }
+    h1 {
+      font-size: 54px;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      letter-spacing: -0.03em;
+      max-width: 16ch;
+    }
+    h2 {
+      font-size: 40px;
+      line-height: 1.15;
+      margin: 0 0 28px;
+      letter-spacing: -0.03em;
+    }
+    .lede {
+      font-size: 26px;
+      line-height: 1.35;
+      color: var(--muted);
+      max-width: 32em;
+      margin: 0 0 28px;
+    }
+    .title-slide .lede { color: #e7ddd0; max-width: 22em; }
+    .meta { font-size: 18px; color: #d7cbb8; margin-top: 28px; }
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 28px;
+      line-height: 1.35;
+    }
+    ul li {
+      position: relative;
+      padding: 10px 0 10px 36px;
+    }
+    ul li::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--teal);
+      position: absolute;
+      left: 0;
+      top: 1.05em;
+    }
+    ul.small { font-size: 22px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px 24px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: var(--teal-dark);
+    }
+    .card p, .card li { font-size: 20px; line-height: 1.4; margin: 0; color: var(--ink); }
+    .card ul li { padding-left: 24px; font-size: 20px; }
+    .card ul li::before { width: 8px; height: 8px; top: 0.85em; background: var(--rust); }
+    pre {
+      margin: 0;
+      background: var(--code);
+      color: #e8f2ef;
+      border-radius: 16px;
+      padding: 22px 26px;
+      font-size: 20px;
+      line-height: 1.45;
+      overflow: auto;
+      font-family: "Cascadia Code", "Consolas", "Liberation Mono", monospace;
+    }
+    .tag {
+      display: inline-block;
+      background: var(--teal);
+      color: white;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .demo .tag { background: var(--rust); }
+    .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; align-items: start; }
+    .brand-header {
+      position: absolute;
+      top: 18px;
+      left: 56px;
+      right: 56px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2;
+    }
+    .brand-header img {
+      height: 56px;
+      width: auto;
+      display: block;
+      background: #fff;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .brand-header .session {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+    }
+    .title-slide .brand-header .session { color: #ead9a3; }
+    .foot {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    .foot .org {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .title-slide .foot {
+      color: #d8cbb8;
+      border-top-color: rgba(255,255,255,0.25);
+    }
+    .bar {
+      height: 6px;
+      background: #d5cdc0;
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+    }
+    .bar > span {
+      display: block;
+      height: 100%;
+      background: var(--teal);
+      width: 0%;
+    }
+    .notes {
+      display: none;
+      background: #10212c;
+      color: #e8f2ef;
+      padding: 12px 72px;
+      font-size: 15px;
+      line-height: 1.4;
+      max-height: 28vh;
+      overflow: auto;
+    }
+    .notes.on { display: block; }
+    .help {
+      display: none;
+      position: absolute;
+      right: 28px;
+      top: 28px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      z-index: 5;
+    }
+    .help.on { display: block; }
+    strong { color: var(--teal-dark); }
+    .title-slide strong { color: #fff; }
+    .big { font-size: 34px; line-height: 1.35; max-width: 22em; margin: 0; }
+    .center {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .title-slide.center {
+      justify-content: center;
+    }
+    .title-slide.center h1 {
+      max-width: none;
+      font-size: 88px;
+    }
+    @page { size: 13.333in 7.5in; margin: 0; }
+    @media print {
+      html, body, .deck, .slides {
+        height: auto !important;
+        overflow: visible !important;
+        background: white !important;
+      }
+      .notes, .help, .bar, .brand-header, .foot { display: none !important; }
+      .slide {
+        display: flex !important;
+        position: relative !important;
+        inset: auto !important;
+        height: 7.5in;
+        width: 13.333in;
+        padding: 78px 64px 48px;
+        page-break-after: always;
+        break-after: page;
+        overflow: hidden;
+      }
+      .slide:last-child { page-break-after: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <div class="slides" id="slides"></div>
+    <div class="notes" id="notes"></div>
+  </div>
+  <div class="help" id="help">
+    ← → space · F fullscreen · N notes · P print/PDF · ? help
+  </div>
+  <script>
+    const slides = [
+      {
+        titleSlide: true,
+        html: `
+          <div class="kicker">Go Programming Master Course</div>
+          <h1>Week 4, Day 1</h1>
+          <p class="lede">Modules, packages, and project shape — today the Student Management System clock starts.</p>
+          <p class="meta">Umesh Indrajith · BSc Eng (Hons), University of Moratuwa<br>Senior Software Engineer / Lecturer</p>
+        `,
+        notes: "Welcome. Product week 1 of ~12. First 10 min: spot-check Week 3 homework (green go test on homework/). Then modules + skeleton. No HTTP today."
+      },
+      {
+        html: `
+          <div class="kicker">Since last week</div>
+          <h2>Prove the katas, then start the product</h2>
+          <ul class="small">
+            <li>Week 3 homework: green <code>go test</code> on <code>Contains</code>, <code>Unique</code>, <code>Freq</code>, and friends.</li>
+            <li>Cold-call: why <code>s = append(s, x)</code>? What is the backing-array gotcha?</li>
+            <li><code>gofmt</code> still required. Secrets still never go in git.</li>
+            <li>Today we stop writing throwaway folders and start the SMS repo layout.</li>
+          </ul>
+        `,
+        notes: "If half the room is red on homework, 10 minutes only — then move. SMS skeleton does not need perfect Unique."
+      },
+      {
+        html: `
+          <div class="kicker">Today</div>
+          <h2>If Day 1 of week 4 works, you can</h2>
+          <ul>
+            <li>Explain package vs module in one sentence each.</li>
+            <li>Run <code>go mod init</code> and read a <code>go.mod</code>.</li>
+            <li>Use <code>internal/</code> as a boundary, not a random folder name.</li>
+            <li>Scaffold the SMS backend tree used in this course.</li>
+            <li>Ship a README that states the product in three sentences.</li>
+            <li>Open a PR with a clean skeleton — no <code>.env</code>, no binaries.</li>
+          </ul>
+        `,
+        notes: "Lab is go mod init + cmd/server printing sms starting. GET /health is week 5."
+      },
+      {
+        html: `
+          <div class="kicker">Software engineering</div>
+          <h2>The product clock starts today</h2>
+          <p class="lede">Weeks 1–3 were language fuel. From now on every week lands something in <strong>SMS</strong> — the campus admin API you will demo in week 16.</p>
+          <ul class="small">
+            <li>Today: empty module + folders + README. Not an HTTP server yet.</li>
+            <li>Spiral teaching: just enough layout to grow handlers next week.</li>
+            <li>One repo per student. Instructor is collaborator. Homework is a <strong>PR</strong>.</li>
+          </ul>
+        `,
+        notes: "Draw the 12-week product arc on the board. Excitement without promising JWT today."
+      },
+      {
+        html: `
+          <div class="kicker">Packages</div>
+          <h2>A package is a folder of Go files with the same name</h2>
+          <pre>// greeter/greeter.go
+package greeter
+
+func Hello(name string) string {
+    return "Hello, " + name
+}</pre>
+          <ul class="small">
+            <li>All <code>.go</code> files in one directory share one <code>package</code> name.</li>
+            <li><code>package main</code> + <code>func main</code> = a program you can <code>go run</code>.</li>
+            <li>Other packages are libraries. You import them; you do not <code>go run</code> them alone.</li>
+          </ul>
+        `,
+        notes: "Connect to week 3 demo layout. Ask: can two files in the same folder have different package names? No."
+      },
+      {
+        html: `
+          <div class="kicker">Imports</div>
+          <h2>Import path = module path + folder</h2>
+          <pre>import (
+    "fmt"                         // standard library
+    "student-management-system/internal/models"
+)</pre>
+          <ul class="small">
+            <li>Stdlib has short paths: <code>fmt</code>, <code>strings</code>, <code>net/http</code>.</li>
+            <li>Your code uses the module name from <code>go.mod</code>, then the directory.</li>
+            <li>Wrong import path → “package … is not in std” if you forgot <code>go.mod</code>.</li>
+          </ul>
+        `,
+        notes: "Remind them of the gotest/greeter classroom error. Module first, then import."
+      },
+      {
+        html: `
+          <div class="kicker">Export rules</div>
+          <h2>Capital letter = visible outside the package</h2>
+          <div class="grid">
+            <div class="card"><h3>Exported</h3><p><code>Hello</code>, <code>Student</code>, <code>NewHandler</code> — other packages can use these names.</p></div>
+            <div class="card"><h3>Unexported</h3><p><code>hello</code>, <code>parseEnv</code>, <code>db</code> — private to this package. Prefer private by default.</p></div>
+            <div class="card"><h3>Same package</h3><p>Files in one folder see each other’s unexported names. Tests in the same package can too.</p></div>
+            <div class="card"><h3>Not Java public</h3><p>There is no <code>public</code> keyword. The first letter <em>is</em> the rule.</p></div>
+          </div>
+        `,
+        notes: "Quick recap from week 1. SMS later: models.Student is exported; internal helpers stay lowercase."
+      },
+      {
+        html: `
+          <div class="kicker">internal/</div>
+          <h2>Go’s built-in “do not import me from outside”</h2>
+          <pre>backend/
+  cmd/server/          # may import internal/...
+  internal/handlers/   # may import internal/models
+  // another module elsewhere CANNOT import this internal/</pre>
+          <ul class="small">
+            <li>Anything under a directory named <code>internal</code> is only importable by the tree rooted at the parent of <code>internal</code>.</li>
+            <li>That is a compiler rule, not a style guide. Use it as the SMS boundary.</li>
+            <li>Put product code in <code>internal/</code>. Put the process entry in <code>cmd/</code>.</li>
+          </ul>
+        `,
+        notes: "Do not deep-dive go list. One sentence: internal stops accidental public APIs."
+      },
+      {
+        html: `
+          <div class="kicker">Modules</div>
+          <h2><code>go mod init</code> names the project</h2>
+          <pre>mkdir -p ~/epic-go/sms/backend && cd ~/epic-go/sms/backend
+go mod init student-management-system
+cat go.mod</pre>
+          <ul class="small">
+            <li>Creates <code>go.mod</code> with a module path. That path prefixes your imports.</li>
+            <li>Week 2–3 used modules as a ritual. Today we teach what it <em>means</em>.</li>
+            <li>One module for the SMS backend is enough for this course.</li>
+          </ul>
+        `,
+        notes: "Live type this. Use student-management-system as the module path — matches COURSE.md lab."
+      },
+      {
+        html: `
+          <div class="kicker">go.mod</div>
+          <h2>The file that defines your module</h2>
+          <pre>module student-management-system
+
+go 1.25</pre>
+          <ul class="small">
+            <li><code>module</code> line = import prefix for your packages.</li>
+            <li><code>go</code> line = language version you target (pin <strong>1.25.x</strong> in class).</li>
+            <li>Later: <code>require</code> lines appear when you <code>go get</code> Gin, pgx, etc. Not today.</li>
+          </ul>
+        `,
+        notes: "Do not teach go.sum deeply. Mention it appears when dependencies arrive in week 5+."
+      },
+      {
+        html: `
+          <div class="kicker">Tools · light</div>
+          <h2><code>go get</code> and <code>go mod tidy</code></h2>
+          <ul class="small">
+            <li><code>go get example.com/mod@v1.2.3</code> — add or upgrade a dependency.</li>
+            <li><code>go mod tidy</code> — add missing requires, remove unused ones. Run it before you push.</li>
+            <li>Today you may have <strong>zero</strong> third-party deps. That is fine. Tidy still keeps <code>go.mod</code> honest.</li>
+          </ul>
+          <pre>go mod tidy
+go build ./...</pre>
+        `,
+        notes: "Pace valve. If layout eats time, show the slide and move. They will feel tidy when Gin arrives."
+      },
+      {
+        html: `
+          <div class="kicker">Layout</div>
+          <h2>The SMS backend tree (memorise the jobs)</h2>
+          <pre>backend/
+  cmd/server/main.go      # process entry — only main
+  internal/config/        # env / settings
+  internal/handlers/      # HTTP adapters (week 5+)
+  internal/repository/    # data access
+  internal/models/        # structs / domain shapes
+  internal/routes/        # wire URLs to handlers
+  internal/middleware/    # JWT later
+  internal/database/      # Postgres later
+  internal/utils/         # JWT helper later — tradeoff
+  go.mod
+  README.md</pre>
+        `,
+        notes: "Leave this on the projector during lab. Empty packages today — folders + maybe a doc.go or placeholder main only."
+      },
+      {
+        html: `
+          <div class="kicker">cmd/server</div>
+          <h2>One process entry — keep it thin</h2>
+          <pre>// cmd/server/main.go
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("sms starting")
+}</pre>
+          <ul class="small">
+            <li><code>cmd/&lt;name&gt;</code> is the usual Go pattern for executables in a repo.</li>
+            <li>Today the main only proves the module builds. Next week it will call routes.</li>
+            <li>Run: <code>go run ./cmd/server</code> from <code>backend/</code>.</li>
+          </ul>
+        `,
+        notes: "Live demo. Students type along. This is the lab gate output."
+      },
+      {
+        html: `
+          <div class="kicker">internal packages</div>
+          <h2>One job per folder</h2>
+          <div class="grid">
+            <div class="card"><h3>handlers</h3><p>Talk HTTP. Translate request → call something else → JSON.</p></div>
+            <div class="card"><h3>repository</h3><p>Talk data. Maps today, SQL later. No Gin imports here.</p></div>
+            <div class="card"><h3>models</h3><p>Shapes: Student, User. No business workflow.</p></div>
+            <div class="card"><h3>config</h3><p>Read env. Fail fast if required secrets missing (later).</p></div>
+          </div>
+        `,
+        notes: "Empty folders are OK today. Create .gitkeep or a one-line package comment file so git tracks them."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo</div>
+          <div class="kicker">Scaffold</div>
+          <h2>Type the skeleton with me</h2>
+          <pre>cd ~/epic-go/sms/backend
+go mod init student-management-system
+mkdir -p cmd/server internal/{config,handlers,repository,models,routes,middleware,database,utils}
+printf '%s\\n' 'package main' 'import "fmt"' 'func main() { fmt.Println("sms starting") }' \\
+  > cmd/server/main.go
+gofmt -w cmd/server/main.go
+go run ./cmd/server</pre>
+        `,
+        notes: "Students follow. Fix Windows/WSL path issues. Do not paste a zip of the finished repo."
+      },
+      {
+        html: `
+          <div class="kicker">Clean code</div>
+          <h2>Small files, clear names, no junk drawer</h2>
+          <ul class="small">
+            <li>A package name is a noun for its job: <code>handlers</code>, not <code>stuff</code>.</li>
+            <li>Prefer many small files over one 800-line <code>main.go</code>.</li>
+            <li>We still have <code>internal/utils</code> for JWT later — that is a <strong>tradeoff</strong>, not a virtue. Do not dump random helpers there this week.</li>
+            <li><code>gofmt</code> on save. Unformatted PRs are returned.</li>
+          </ul>
+        `,
+        notes: "Call out utils honestly. Course repo has utils for JWT — students should not invent a dumping ground today."
+      },
+      {
+        html: `
+          <div class="kicker">README</div>
+          <h2>The contract of the repo</h2>
+          <ul class="small">
+            <li>Three sentences: what SMS is, who uses it, what “done” looks like this term.</li>
+            <li>How to run (even if today it only prints <code>sms starting</code>).</li>
+            <li>Module path, Go version, link to your GitHub.</li>
+            <li>A README that says “final year project” and nothing else fails the homework.</li>
+          </ul>
+          <pre># Student Management System
+Staff register/login, then manage student records via a Go API.
+This repo is the Epic Learn course backend (weeks 4–16).</pre>
+        `,
+        notes: "Show a bad README and rewrite it live in 2 minutes."
+      },
+      {
+        html: `
+          <div class="kicker">Git / PR</div>
+          <h2>Homework is a pull request, not a zip</h2>
+          <pre>git checkout -b week-04-skeleton
+git add .
+git commit -m "Add SMS backend skeleton and README"
+git push -u origin week-04-skeleton
+# open PR on GitHub → invite instructor as collaborator</pre>
+          <ul class="small">
+            <li>Branch names: short, purposeful.</li>
+            <li>PR description: what and why (three lines is enough today).</li>
+            <li>Instructor merges only if <code>gofmt</code> is clean and <code>.env</code> is absent.</li>
+          </ul>
+        `,
+        notes: "If someone has no GitHub from week 1, fix that before they leave."
+      },
+      {
+        html: `
+          <div class="kicker">Secrets</div>
+          <h2><code>.env</code> stays local. <code>.env.example</code> is committed.</h2>
+          <pre># .gitignore
+.env
+*.exe
+/bin/
+
+# .env.example  (safe to commit)
+PORT=8080
+DATABASE_URL=
+JWT_SECRET=</pre>
+          <ul class="small">
+            <li>Empty values in the example. Real secrets never in git history.</li>
+            <li>We do not need a real <code>.env</code> yet — create the ignore rule now so week 5 is safe.</li>
+          </ul>
+        `,
+        notes: "Check their .gitignore in lab. This is a merge blocker for homework."
+      },
+      {
+        html: `
+          <div class="kicker">Lab · rest of class</div>
+          <h2>Done when all of this is true</h2>
+          <ul class="small">
+            <li><code>backend/go.mod</code> exists with module <code>student-management-system</code></li>
+            <li>Folder tree matches the slide (empty <code>internal/*</code> folders are fine)</li>
+            <li><code>go run ./cmd/server</code> prints <code>sms starting</code></li>
+            <li>README has three product sentences + how to run</li>
+            <li><code>.env</code> is gitignored; no binaries committed</li>
+            <li>Branch pushed; PR URL shown to instructor</li>
+          </ul>
+        `,
+        notes: "Gate on the board. Pair stuck students. Typical: go run from wrong directory, missing go.mod, committed .env by mistake."
+      },
+      {
+        html: `
+          <div class="kicker">Homework</div>
+          <h2>PR the skeleton before next class</h2>
+          <ul class="small">
+            <li>Same gate as the lab — finished and pushed.</li>
+            <li>PR title example: <code>Week 4 — SMS backend skeleton</code>.</li>
+            <li>Optional: one paragraph in the PR on why <code>internal/</code> exists.</li>
+            <li>Do <strong>not</strong> add Gin or HTTP yet. That is week 5.</li>
+          </ul>
+        `,
+        notes: "Unlike weeks 2–3, homework IS on a slide today because the deliverable is the PR itself. Still keep handout detailed."
+      },
+      {
+        html: `
+          <div class="kicker">Next session</div>
+          <h2>Week 5 — HTTP, JSON, Gin, first SMS API</h2>
+          <ul class="small">
+            <li>Stdlib <code>net/http</code> hello, then Gin.</li>
+            <li><code>GET /health</code> → JSON <code>{"status":"ok"}</code>.</li>
+            <li>Bring a merged or reviewable skeleton PR.</li>
+            <li>Postman arrives. The API becomes real.</li>
+          </ul>
+        `,
+        notes: "Do not start Gin today even if lab finishes early. Extra: improve README, add .env.example, empty package docs."
+      },
+      {
+        html: `
+          <div class="kicker">Words to keep</div>
+          <h2>Say these correctly next week</h2>
+          <div class="grid">
+            <div class="card"><h3>Package</h3><p>Folder of Go files with one package clause.</p></div>
+            <div class="card"><h3>Module</h3><p>Versioned unit defined by go.mod; import prefix.</p></div>
+            <div class="card"><h3>internal/</h3><p>Compiler-enforced privacy boundary for your app code.</p></div>
+            <div class="card"><h3>cmd/</h3><p>Place for main packages / executables.</p></div>
+          </div>
+        `,
+        notes: "Quick oral quiz before they leave if time."
+      },
+      {
+        titleSlide: true,
+        cls: "center",
+        html: `
+          <h1>Questions</h1>
+        `,
+        notes: "Take questions. Start scaffold immediately. Collect PR URLs / GitHub links before they leave."
+      }
+    ];
+
+    const root = document.getElementById("slides");
+    const notesEl = document.getElementById("notes");
+    const help = document.getElementById("help");
+    let i = 0;
+    let notesOn = false;
+
+    slides.forEach((s, idx) => {
+      const el = document.createElement("section");
+      el.className = "slide" + (s.titleSlide ? " title-slide" : "") + (s.cls ? " " + s.cls : "");
+      el.innerHTML = `
+        <header class="brand-header">
+          <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+          <div class="session">Week 4 · Day 1</div>
+        </header>
+        ` + s.html + `
+        <div class="foot">
+          <span class="org">Epic Learn Institute of Higher Education - Go Programming Master Course</span>
+          <span>${idx + 1} / ${slides.length}</span>
+        </div>
+        <div class="bar"><span></span></div>`;
+      root.appendChild(el);
+    });
+
+    function show(n) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      [...root.children].forEach((el, idx) => {
+        el.classList.toggle("on", idx === i);
+        el.querySelector(".bar > span").style.width = ((i + 1) / slides.length * 100) + "%";
+      });
+      notesEl.textContent = "Note: " + slides[i].notes;
+      location.hash = String(i + 1);
+    }
+
+    function parseHash() {
+      const n = parseInt(location.hash.replace("#", ""), 10);
+      show(Number.isFinite(n) ? n - 1 : 0);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); show(i + 1); }
+      if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); show(i - 1); }
+      if (e.key === "Home") show(0);
+      if (e.key === "End") show(slides.length - 1);
+      if (e.key === "n" || e.key === "N") { notesOn = !notesOn; notesEl.classList.toggle("on", notesOn); }
+      if (e.key === "?" || e.key === "h") help.classList.toggle("on");
+      if (e.key === "f" || e.key === "F") {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+      }
+      if (e.key === "p" || e.key === "P") window.print();
+    });
+
+    document.getElementById("slides").addEventListener("click", (e) => {
+      if (e.clientX > innerWidth * 0.6) show(i + 1);
+      else if (e.clientX < innerWidth * 0.4) show(i - 1);
+    });
+
+    window.addEventListener("hashchange", parseHash);
+    parseHash();
+  </script>
+</body>
+</html>
