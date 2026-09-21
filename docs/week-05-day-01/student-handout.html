@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Week 5 student handout — Epic Learn Go</title>
+  <style>
+    :root { --ink:#14202b; --teal:#0b6e68; --muted:#4d5d6b; --line:#d8cfc2; --code:#10212c; }
+    * { box-sizing: border-box; }
+    body { margin: 0 auto; max-width: 900px; padding: 28px 32px 48px; font-family: "Segoe UI", Calibri, system-ui, sans-serif; color: var(--ink); line-height: 1.35; }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 16px; color: var(--teal); margin: 22px 0 8px; letter-spacing: .04em; text-transform: uppercase; }
+    .sub { color: var(--muted); margin: 0 0 16px; }
+    pre { background: var(--code); color: #e8f2ef; padding: 12px 14px; border-radius: 10px; font-size: 13px; overflow: auto; font-family: Consolas, monospace; }
+    ul { margin: 6px 0; padding-left: 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+    th { background: #eef6f5; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .brand-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 18px; }
+    .brand-header img { height: 58px; width: auto; }
+    .brand-header .session { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--teal); text-align: right; }
+    .print-footer { margin-top: 22px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); text-align: center; }
+    @page { size: A4; margin: 24mm 14mm 18mm 14mm; }
+    @media print { body { padding: 0; } .brand-header, .print-footer { display: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="brand-header">
+    <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+    <div class="session">Go Programming Master Course<br>Week 5 · Day 1</div>
+  </header>
+  <h1>Week 5, Day 1 — student handout</h1>
+  <p class="sub">Umesh Indrajith · First SMS HTTP API. No DB / JWT today.</p>
+
+  <h2>Outcomes</h2>
+  <ul>
+    <li>HTTP method, path, status, JSON body.</li>
+    <li>Tiny <code>net/http</code> server, then Gin.</li>
+    <li><code>GET /health</code> and <code>GET /api/hello</code> on <code>:8080</code>.</li>
+    <li>Prove with <code>curl</code> and Postman.</li>
+  </ul>
+
+  <h2>Add Gin</h2>
+<pre>cd backend
+go get github.com/gin-gonic/gin
+go mod tidy</pre>
+
+  <h2>Health (Gin)</h2>
+<pre>r := gin.Default()
+r.GET("/health", func(c *gin.Context) {
+    c.JSON(http.StatusOK, gin.H{
+        "status":  "ok",
+        "message": "Backend is running",
+    })
+})
+r.GET("/api/hello", func(c *gin.Context) {
+    c.JSON(http.StatusOK, gin.H{"message": "hello from SMS"})
+})
+r.Run(":8080")</pre>
+
+  <h2>Prove it</h2>
+<pre>go run ./cmd/server
+curl -i http://localhost:8080/health
+curl -s http://localhost:8080/api/hello</pre>
+
+  <div class="cols">
+    <div>
+      <h2>Status cheat sheet</h2>
+      <table>
+        <tr><th>Code</th><th>Meaning</th></tr>
+        <tr><td>200</td><td>OK</td></tr>
+        <tr><td>400</td><td>Bad request</td></tr>
+        <tr><td>404</td><td>Not found</td></tr>
+        <tr><td>500</td><td>Server error</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>If it breaks</h2>
+      <ul>
+        <li>refused → start the server</li>
+        <li>port in use → kill old process</li>
+        <li>gin missing → go get in backend/</li>
+        <li>Postman https → use http://</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Homework</h2>
+  <p>PR with health + hello + README curl + Postman 200 proof. Stretch: hard-coded <code>GET /api/students</code> array. Details: <code>homework.md</code>.</p>
+  <p class="print-footer">Epic Learn Institute of Higher Education - Go Programming Master Course</p>
+</body>
+</html>
