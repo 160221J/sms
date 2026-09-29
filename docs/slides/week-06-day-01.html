@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 6 · Day 1 — Go Programming Master Course · Epic Learn</title>
+  <style>
+    :root {
+      --ink: #14202b;
+      --muted: #4d5d6b;
+      --paper: #f4efe6;
+      --card: #fffdf9;
+      --line: #d8cfc2;
+      --teal: #0b6e68;
+      --teal-dark: #084f4b;
+      --rust: #c24e1d;
+      --gold: #c9a227;
+      --code: #10212c;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #0e181f;
+      color: var(--ink);
+      font-family: "Segoe UI", "Calibri", "Liberation Sans", system-ui, sans-serif;
+    }
+    .deck {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .slides {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 96px 72px 88px;
+      background:
+        radial-gradient(900px 420px at 100% -10%, rgba(11, 110, 104, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--paper), #efe7d9);
+    }
+    .slide.on { display: flex; flex-direction: column; }
+    .slide.title-slide {
+      justify-content: flex-end;
+      background:
+        linear-gradient(180deg, rgba(8, 31, 36, 0.15), rgba(8, 31, 36, 0.55)),
+        linear-gradient(135deg, #0b6e68 0%, #14202b 55%, #c24e1d 140%);
+      color: #f7f1e6;
+    }
+    .kicker {
+      font-size: 15px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .title-slide .kicker { color: #ead9a3; }
+    h1 {
+      font-size: 54px;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      letter-spacing: -0.03em;
+      max-width: 16ch;
+    }
+    h2 {
+      font-size: 40px;
+      line-height: 1.15;
+      margin: 0 0 28px;
+      letter-spacing: -0.03em;
+    }
+    .lede {
+      font-size: 26px;
+      line-height: 1.35;
+      color: var(--muted);
+      max-width: 32em;
+      margin: 0 0 28px;
+    }
+    .title-slide .lede { color: #e7ddd0; max-width: 22em; }
+    .meta { font-size: 18px; color: #d7cbb8; margin-top: 28px; }
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 28px;
+      line-height: 1.35;
+    }
+    ul li {
+      position: relative;
+      padding: 10px 0 10px 36px;
+    }
+    ul li::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--teal);
+      position: absolute;
+      left: 0;
+      top: 1.05em;
+    }
+    ul.small { font-size: 22px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px 24px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: var(--teal-dark);
+    }
+    .card p, .card li { font-size: 20px; line-height: 1.4; margin: 0; color: var(--ink); }
+    .card ul li { padding-left: 24px; font-size: 20px; }
+    .card ul li::before { width: 8px; height: 8px; top: 0.85em; background: var(--rust); }
+    pre {
+      margin: 0;
+      background: var(--code);
+      color: #e8f2ef;
+      border-radius: 16px;
+      padding: 22px 26px;
+      font-size: 20px;
+      line-height: 1.45;
+      overflow: auto;
+      font-family: "Cascadia Code", "Consolas", "Liberation Mono", monospace;
+    }
+    .tag {
+      display: inline-block;
+      background: var(--teal);
+      color: white;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .demo .tag { background: var(--rust); }
+    .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; align-items: start; }
+    .brand-header {
+      position: absolute;
+      top: 18px;
+      left: 56px;
+      right: 56px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2;
+    }
+    .brand-header img {
+      height: 56px;
+      width: auto;
+      display: block;
+      background: #fff;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .brand-header .session {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+    }
+    .title-slide .brand-header .session { color: #ead9a3; }
+    .foot {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    .foot .org {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .title-slide .foot {
+      color: #d8cbb8;
+      border-top-color: rgba(255,255,255,0.25);
+    }
+    .bar {
+      height: 6px;
+      background: #d5cdc0;
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+    }
+    .bar > span {
+      display: block;
+      height: 100%;
+      background: var(--teal);
+      width: 0%;
+    }
+    .notes {
+      display: none;
+      background: #10212c;
+      color: #e8f2ef;
+      padding: 12px 72px;
+      font-size: 15px;
+      line-height: 1.4;
+      max-height: 28vh;
+      overflow: auto;
+    }
+    .notes.on { display: block; }
+    .help {
+      display: none;
+      position: absolute;
+      right: 28px;
+      top: 28px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      z-index: 5;
+    }
+    .help.on { display: block; }
+    strong { color: var(--teal-dark); }
+    .title-slide strong { color: #fff; }
+    .big { font-size: 34px; line-height: 1.35; max-width: 22em; margin: 0; }
+    .center {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .title-slide.center {
+      justify-content: center;
+    }
+    .title-slide.center h1 {
+      max-width: none;
+      font-size: 88px;
+    }
+    @page { size: 13.333in 7.5in; margin: 0; }
+    @media print {
+      html, body, .deck, .slides {
+        height: auto !important;
+        overflow: visible !important;
+        background: white !important;
+      }
+      .notes, .help, .bar, .brand-header, .foot { display: none !important; }
+      .slide {
+        display: flex !important;
+        position: relative !important;
+        inset: auto !important;
+        height: 7.5in;
+        width: 13.333in;
+        padding: 78px 64px 48px;
+        page-break-after: always;
+        break-after: page;
+        overflow: hidden;
+      }
+      .slide:last-child { page-break-after: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <div class="slides" id="slides"></div>
+    <div class="notes" id="notes"></div>
+  </div>
+  <div class="help" id="help">
+    ← → space · F fullscreen · N notes · P print/PDF · ? help
+  </div>
+  <script>
+    const slides = [
+      {
+        titleSlide: true,
+        html: `
+          <div class="kicker">Go Programming Master Course</div>
+          <h1>Week 6, Day 1</h1>
+          <p class="lede">Functions and methods inside SMS — extract handlers from <code>main</code>, keep health green.</p>
+          <p class="meta">Umesh Indrajith · BSc Eng (Hons), University of Moratuwa<br>Senior Software Engineer / Lecturer</p>
+        `,
+        notes: "Product week 3. Health from week 5 must work. Today: deepen functions, extract handlers package, FullName helper. No new product feature required."
+      },
+      {
+        html: `
+          <div class="kicker">Since last week</div>
+          <h2>A running API is the starting line</h2>
+          <ul class="small">
+            <li><code>GET /health</code> returns 200 with the exact JSON. If not, fix that first.</li>
+            <li>Cold-call: what is a handler? What does Gin wrap?</li>
+            <li>Today we <strong>refactor</strong>, not add Postgres or JWT.</li>
+            <li><code>gofmt</code> still wins. Unformatted PRs returned.</li>
+          </ul>
+        `,
+        notes: "Spot-check three health endpoints. Do not start refactor on a red server."
+      },
+      {
+        html: `
+          <div class="kicker">Today</div>
+          <h2>If Day 1 of week 6 works, you can</h2>
+          <ul>
+            <li>Name the parts of a function: name, params, results.</li>
+            <li>Return <code>(value, error)</code> and never silently ignore <code>err</code>.</li>
+            <li>Use <code>defer</code> for cleanup at function exit.</li>
+            <li>Tell a function from a method; preview pointer receivers.</li>
+            <li>Move health/hello into <code>internal/handlers</code>; keep <code>:8080</code> green.</li>
+            <li>Ship <code>FullName(first, last string) string</code> with a test.</li>
+          </ul>
+        `,
+        notes: "Deep structs week 7. Generics: one example only."
+      },
+      {
+        html: `
+          <div class="kicker">Software engineering</div>
+          <h2>Refactor is a feature when the layout was lying</h2>
+          <p class="lede"><code>main</code> that owns every route will rot. Handlers belong in a package with one job: talk HTTP.</p>
+          <ul class="small">
+            <li>SMS milestone: extract, do not expand the product surface.</li>
+            <li>PR description says what moved and why — not “fixed stuff”.</li>
+            <li>Green health before and after is the proof.</li>
+          </ul>
+        `,
+        notes: "Connect to week 4 layers. Empty handlers folder gets real code today."
+      },
+      {
+        html: `
+          <div class="kicker">Functions</div>
+          <h2>Parts of a function</h2>
+          <pre>func FullName(first, last string) string {
+    return first + " " + last
+}
+
+func Max(nums []int) (int, bool) {
+    // name · params · results
+}</pre>
+          <ul class="small">
+            <li><strong>Name</strong> — exported if capital (<code>FullName</code>).</li>
+            <li><strong>Parameters</strong> — typed; same type can share: <code>first, last string</code>.</li>
+            <li><strong>Results</strong> — zero, one, or many. Named results: use sparingly.</li>
+          </ul>
+        `,
+        notes: "They wrote FullName in week 2/3. Reuse the story inside SMS."
+      },
+      {
+        html: `
+          <div class="kicker">Pass by value</div>
+          <h2>Arguments are copies — unless you share memory</h2>
+          <pre>func bump(n int) { n++ }
+func main() {
+    x := 3
+    bump(x)
+    fmt.Println(x) // still 3
+}</pre>
+          <ul class="small">
+            <li>Ints, structs (by default), and other values are copied into the function.</li>
+            <li>Slices and maps copy the <em>header</em> but share the backing data — week 3 gotcha returns.</li>
+            <li>Methods that must change a struct usually use a <strong>pointer receiver</strong> (preview).</li>
+          </ul>
+        `,
+        notes: "Do not deep-dive pointers. Plant the need for *StudentHandler."
+      },
+      {
+        html: `
+          <div class="kicker">Multiple returns</div>
+          <h2><code>return x, err</code> is the Go handshake</h2>
+          <pre>func ParsePort(s string) (int, error) {
+    if s == "" {
+        return 0, fmt.Errorf("port required")
+    }
+    // ...
+    return 8080, nil
+}
+
+port, err := ParsePort(os.Getenv("PORT"))
+if err != nil {
+    log.Fatal(err)
+}</pre>
+          <ul class="small">
+            <li>Ignoring <code>err</code> with <code>_</code> is a bug unless you can explain why.</li>
+            <li>Handlers will return JSON errors — still check <code>err</code> from callees.</li>
+          </ul>
+        `,
+        notes: "Week 9 deepens errors. Today: never swallow err."
+      },
+      {
+        html: `
+          <div class="kicker">defer</div>
+          <h2>Run this when the function exits</h2>
+          <pre>func work() {
+    f, err := os.Open("notes.txt")
+    if err != nil { return }
+    defer f.Close() // runs at end of work — even on early return
+
+    // read f ...
+}</pre>
+          <ul class="small">
+            <li>LIFO: last <code>defer</code> runs first.</li>
+            <li>Use for close, unlock, and later <code>recover</code> patterns.</li>
+            <li>In HTTP handlers, prefer returning; <code>defer</code> shines with files and mutexes (week 12).</li>
+          </ul>
+        `,
+        notes: "One live defer Close demo if time. Do not teach recover today."
+      },
+      {
+        html: `
+          <div class="kicker">Methods</div>
+          <h2>A function with a receiver</h2>
+          <pre>type HealthHandler struct{}
+
+func (h *HealthHandler) Get(c *gin.Context) {
+    c.JSON(http.StatusOK, gin.H{
+        "status": "ok", "message": "Backend is running",
+    })
+}
+
+h := &HealthHandler{}
+r.GET("/health", h.Get)</pre>
+          <ul class="small">
+            <li>Same idea as a plain function — plus a home type for state later (repo, config).</li>
+            <li>Course target: <code>(h *StudentHandler)</code> style methods in <code>internal/handlers</code>.</li>
+          </ul>
+        `,
+        notes: "Struct fields can stay empty today. Constructor next slide."
+      },
+      {
+        html: `
+          <div class="kicker">Constructors</div>
+          <h2><code>New…</code> is just a function that returns a value</h2>
+          <pre>type HelloHandler struct{}
+
+func NewHelloHandler() *HelloHandler {
+    return &HelloHandler{}
+}
+
+func (h *HelloHandler) Get(c *gin.Context) {
+    c.JSON(http.StatusOK, gin.H{"message": "hello from SMS"})
+}</pre>
+          <ul class="small">
+            <li>You do not fully need struct theory yet — copy the shape.</li>
+            <li>Later <code>NewStudentHandler(repo)</code> will inject dependencies.</li>
+          </ul>
+        `,
+        notes: "Toward backend/internal/handlers in this repo."
+      },
+      {
+        html: `
+          <div class="kicker">Pointer vs value · preview</div>
+          <h2>Why handlers use <code>*HealthHandler</code></h2>
+          <div class="grid">
+            <div class="card"><h3>Value receiver</h3><p><code>func (h HealthHandler)</code> — method gets a copy. Fine for tiny immutable helpers.</p></div>
+            <div class="card"><h3>Pointer receiver</h3><p><code>func (h *HealthHandler)</code> — shared instance; can hold repo/db later.</p></div>
+            <div class="card"><h3>Course default</h3><p>HTTP handlers: pointer receivers. Matches this repo.</p></div>
+            <div class="card"><h3>Deep dive</h3><p>Stack/heap and escape analysis — week 8. Memorise the pattern today.</p></div>
+          </div>
+        `,
+        notes: "Do not teach & and * theory beyond 'star means pointer receiver'."
+      },
+      {
+        html: `
+          <div class="kicker">Generics · one example</div>
+          <h2>Then stop</h2>
+          <pre>func First[T any](s []T) (T, bool) {
+    var zero T
+    if len(s) == 0 {
+        return zero, false
+    }
+    return s[0], true
+}
+
+v, ok := First([]string{"SE", "CS"})</pre>
+          <ul class="small">
+            <li>One generic helper so the syntax is not alien in docs.</li>
+            <li>Do not build a generics library. SMS does not need it this week.</li>
+          </ul>
+        `,
+        notes: "Pace valve. Show slide; skip live typing if refactor runs long."
+      },
+      {
+        html: `
+          <div class="kicker">SMS milestone</div>
+          <h2>Extract week 5 into <code>internal/handlers</code></h2>
+          <pre>backend/
+  cmd/server/main.go          # build engine, register routes, Run
+  internal/handlers/
+    health.go                 # HealthHandler + Get
+    hello.go                  # HelloHandler + Get
+    name.go                   # FullName (+ test)</pre>
+          <ul class="small">
+            <li><code>main</code> stays thin. Routes can stay in <code>main</code> or a tiny <code>routes</code> register.</li>
+            <li>Health JSON contract must not change.</li>
+          </ul>
+        `,
+        notes: "Leave tree on projector during lab."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo</div>
+          <div class="kicker">Refactor</div>
+          <h2>Move health out of <code>main</code></h2>
+          <pre>// internal/handlers/health.go
+package handlers
+func NewHealthHandler() *HealthHandler { return &HealthHandler{} }
+func (h *HealthHandler) Get(c *gin.Context) { /* c.JSON ... */ }
+
+// cmd/server/main.go
+h := handlers.NewHealthHandler()
+r.GET("/health", h.Get)
+r.Run(":8080")</pre>
+        `,
+        notes: "Type live. Fail compile once on wrong import path. go run ./cmd/server; curl health."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo</div>
+          <div class="kicker">Helper</div>
+          <h2><code>FullName</code> for later student responses</h2>
+          <pre>// internal/handlers/name.go
+package handlers
+func FullName(first, last string) string {
+    first = strings.TrimSpace(first)
+    last = strings.TrimSpace(last)
+    if first == "" { return last }
+    if last == "" { return first }
+    return first + " " + last
+}</pre>
+          <p class="lede" style="margin-top:12px">Add <code>name_test.go</code>. <code>go test ./internal/handlers</code> must be green.</p>
+        `,
+        notes: "Reuse week 2/3 trim rules. Red → green once."
+      },
+      {
+        html: `
+          <div class="kicker">Wiring</div>
+          <h2>What <code>main</code> should look like after</h2>
+          <pre>func main() {
+    r := gin.Default()
+    health := handlers.NewHealthHandler()
+    hello := handlers.NewHelloHandler()
+    r.GET("/health", health.Get)
+    r.GET("/api/hello", hello.Get)
+    r.Run(":8080")
+}</pre>
+          <ul class="small">
+            <li>No business logic in <code>main</code> beyond wiring.</li>
+            <li>Optional: <code>internal/routes.Register(r)</code> if the file stays tidy.</li>
+          </ul>
+        `,
+        notes: "Accept routes in main if handlers package is real."
+      },
+      {
+        html: `
+          <div class="kicker">Ignoring errors</div>
+          <h2><code>_</code> is honest; silence is not</h2>
+          <pre>// bad — you hid a failure
+json.Marshal(x)
+
+// ok only if you truly do not care (rare)
+_, _ = fmt.Println("note")
+
+// usual
+b, err := json.Marshal(x)
+if err != nil { /* handle */ }</pre>
+          <ul class="small">
+            <li>Blank identifier means “I see this value; I choose not to use it.”</li>
+            <li>Reviewers will ask about ignored <code>error</code> returns.</li>
+          </ul>
+        `,
+        notes: "Short slide. Connect to homework review rubric."
+      },
+      {
+        html: `
+          <div class="kicker">Lab · rest of class</div>
+          <h2>Done when all of this is true</h2>
+          <ul class="small">
+            <li>Health + hello still 200 on <code>:8080</code></li>
+            <li>Handler logic lives under <code>internal/handlers</code></li>
+            <li><code>FullName</code> + green <code>go test ./internal/handlers</code></li>
+            <li><code>main</code> mostly wires routes</li>
+            <li>PR opened describing the refactor</li>
+          </ul>
+        `,
+        notes: "Gate on board. Typical: wrong package name, import cycle, forgot go test path."
+      },
+      {
+        html: `
+          <div class="kicker">Homework</div>
+          <h2>PR the refactor — no new product feature</h2>
+          <ul class="small">
+            <li>Required: handlers package + thin <code>main</code> + green tests for <code>FullName</code>.</li>
+            <li>README: note the new layout in one paragraph.</li>
+            <li>Stretch: <code>internal/routes</code> registers paths; <code>main</code> only <code>Run</code>.</li>
+            <li>Do not add JWT, Postgres, or student CRUD this week.</li>
+          </ul>
+        `,
+        notes: "If refactor is real, no feature required to pass."
+      },
+      {
+        html: `
+          <div class="kicker">Next session</div>
+          <h2>Week 7 — structs, JSON tags, in-memory students</h2>
+          <ul class="small">
+            <li><code>models.Student</code>, create + list via Postman.</li>
+            <li>JSON tags matching this repo.</li>
+            <li>Bring a clean handlers layout and green health.</li>
+          </ul>
+        `,
+        notes: "Do not start Student CRUD today."
+      },
+      {
+        html: `
+          <div class="kicker">Words to keep</div>
+          <h2>Say these correctly next week</h2>
+          <div class="grid">
+            <div class="card"><h3>Function</h3><p>Named code with params and results.</p></div>
+            <div class="card"><h3>Method</h3><p>Function with a receiver type.</p></div>
+            <div class="card"><h3>defer</h3><p>Runs at function exit (LIFO).</p></div>
+            <div class="card"><h3>Constructor</h3><p><code>NewX()</code> function returning a ready value.</p></div>
+          </div>
+        `,
+        notes: "Oral quiz if time."
+      },
+      {
+        html: `
+          <div class="kicker">Review bar</div>
+          <h2>Instructor merges when</h2>
+          <ul class="small">
+            <li><code>gofmt</code> clean; health JSON unchanged</li>
+            <li>Handlers not still pasted entirely inside <code>main</code></li>
+            <li><code>go test ./internal/handlers</code> green</li>
+            <li>PR says what moved — not a zip dump</li>
+          </ul>
+        `,
+        notes: "Collect PR URLs before they leave."
+      },
+      {
+        html: `
+          <div class="kicker">Safety</div>
+          <h2>Still true while refactoring</h2>
+          <ul class="small">
+            <li>No secrets in git.</li>
+            <li>Do not “fix” by deleting <code>go.mod</code>.</li>
+            <li>Keep port <code>:8080</code> unless the whole class agrees otherwise.</li>
+            <li>Commit working health before a big move — small steps.</li>
+          </ul>
+        `,
+        notes: "Encourage commit after each extract."
+      },
+      {
+        titleSlide: true,
+        cls: "center",
+        html: `
+          <h1>Questions</h1>
+        `,
+        notes: "Then live extract health → FullName test → lab."
+      }
+    ];
+
+
+    const root = document.getElementById("slides");
+    const notesEl = document.getElementById("notes");
+    const help = document.getElementById("help");
+    let i = 0;
+    let notesOn = false;
+
+    slides.forEach((s, idx) => {
+      const el = document.createElement("section");
+      el.className = "slide" + (s.titleSlide ? " title-slide" : "") + (s.cls ? " " + s.cls : "");
+      el.innerHTML = `
+        <header class="brand-header">
+          <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+          <div class="session">Week 6 · Day 1</div>
+        </header>
+        ` + s.html + `
+        <div class="foot">
+          <span class="org">Epic Learn Institute of Higher Education - Go Programming Master Course</span>
+          <span>${idx + 1} / ${slides.length}</span>
+        </div>
+        <div class="bar"><span></span></div>`;
+      root.appendChild(el);
+    });
+
+    function show(n) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      [...root.children].forEach((el, idx) => {
+        el.classList.toggle("on", idx === i);
+        el.querySelector(".bar > span").style.width = ((i + 1) / slides.length * 100) + "%";
+      });
+      notesEl.textContent = "Note: " + slides[i].notes;
+      location.hash = String(i + 1);
+    }
+
+    function parseHash() {
+      const n = parseInt(location.hash.replace("#", ""), 10);
+      show(Number.isFinite(n) ? n - 1 : 0);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); show(i + 1); }
+      if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); show(i - 1); }
+      if (e.key === "Home") show(0);
+      if (e.key === "End") show(slides.length - 1);
+      if (e.key === "n" || e.key === "N") { notesOn = !notesOn; notesEl.classList.toggle("on", notesOn); }
+      if (e.key === "?" || e.key === "h") help.classList.toggle("on");
+      if (e.key === "f" || e.key === "F") {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+      }
+      if (e.key === "p" || e.key === "P") window.print();
+    });
+
+    document.getElementById("slides").addEventListener("click", (e) => {
+      if (e.clientX > innerWidth * 0.6) show(i + 1);
+      else if (e.clientX < innerWidth * 0.4) show(i - 1);
+    });
+
+    window.addEventListener("hashchange", parseHash);
+    parseHash();
+  </script>
+</body>
+</html>

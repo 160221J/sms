@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Week 6 student handout — Epic Learn Go</title>
+  <style>
+    :root { --ink:#14202b; --teal:#0b6e68; --muted:#4d5d6b; --line:#d8cfc2; --code:#10212c; }
+    * { box-sizing: border-box; }
+    body { margin: 0 auto; max-width: 900px; padding: 28px 32px 48px; font-family: "Segoe UI", Calibri, system-ui, sans-serif; color: var(--ink); line-height: 1.35; }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 16px; color: var(--teal); margin: 22px 0 8px; letter-spacing: .04em; text-transform: uppercase; }
+    .sub { color: var(--muted); margin: 0 0 16px; }
+    pre { background: var(--code); color: #e8f2ef; padding: 12px 14px; border-radius: 10px; font-size: 13px; overflow: auto; font-family: Consolas, monospace; }
+    ul { margin: 6px 0; padding-left: 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+    th { background: #eef6f5; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .brand-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 18px; }
+    .brand-header img { height: 58px; width: auto; }
+    .brand-header .session { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--teal); text-align: right; }
+    .print-footer { margin-top: 22px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); text-align: center; }
+    @page { size: A4; margin: 24mm 14mm 18mm 14mm; }
+    @media print { body { padding: 0; } .brand-header, .print-footer { display: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="brand-header">
+    <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+    <div class="session">Go Programming Master Course<br>Week 6 · Day 1</div>
+  </header>
+  <h1>Week 6, Day 1 — student handout</h1>
+  <p class="sub">Umesh Indrajith · Refactor into handlers. No new API features required.</p>
+
+  <h2>Outcomes</h2>
+  <ul>
+    <li>Function parts; multiple returns; do not ignore <code>err</code>.</li>
+    <li><code>defer</code>; methods with pointer receivers; <code>New…</code> constructors.</li>
+    <li>Move health/hello into <code>internal/handlers</code>.</li>
+    <li><code>FullName</code> + green tests.</li>
+  </ul>
+
+  <h2>Handler shape</h2>
+<pre>package handlers
+
+type HealthHandler struct{}
+
+func NewHealthHandler() *HealthHandler {
+    return &HealthHandler{}
+}
+
+func (h *HealthHandler) Get(c *gin.Context) {
+    c.JSON(http.StatusOK, gin.H{
+        "status":  "ok",
+        "message": "Backend is running",
+    })
+}</pre>
+
+  <h2>Thin main</h2>
+<pre>health := handlers.NewHealthHandler()
+hello := handlers.NewHelloHandler()
+r.GET("/health", health.Get)
+r.GET("/api/hello", hello.Get)
+r.Run(":8080")</pre>
+
+  <h2>FullName + test</h2>
+<pre>go test ./internal/handlers -v</pre>
+
+  <div class="cols">
+    <div>
+      <h2>Words</h2>
+      <table>
+        <tr><th>Term</th><th>Meaning</th></tr>
+        <tr><td>Method</td><td>Function with a receiver</td></tr>
+        <tr><td>defer</td><td>Runs at function exit</td></tr>
+        <tr><td>NewX</td><td>Constructor function</td></tr>
+        <tr><td>*</td><td>Pointer receiver (preview)</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>If it breaks</h2>
+      <ul>
+        <li>404 → register <code>h.Get</code> not <code>h.Get()</code></li>
+        <li>nil panic → call <code>New…</code> first</li>
+        <li>import fail → check module path</li>
+        <li>no tests → run from <code>backend/</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Homework</h2>
+  <p>PR the refactor. Health must stay green. Details: <code>homework.md</code>.</p>
+  <p class="print-footer">Epic Learn Institute of Higher Education - Go Programming Master Course</p>
+</body>
+</html>
