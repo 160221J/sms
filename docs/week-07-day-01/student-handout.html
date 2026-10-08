@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Week 7 student handout — Epic Learn Go</title>
+  <style>
+    :root { --ink:#14202b; --teal:#0b6e68; --muted:#4d5d6b; --line:#d8cfc2; --code:#10212c; }
+    * { box-sizing: border-box; }
+    body { margin: 0 auto; max-width: 900px; padding: 28px 32px 48px; font-family: "Segoe UI", Calibri, system-ui, sans-serif; color: var(--ink); line-height: 1.35; }
+    h1 { font-size: 26px; margin: 0 0 4px; }
+    h2 { font-size: 16px; color: var(--teal); margin: 22px 0 8px; letter-spacing: .04em; text-transform: uppercase; }
+    .sub { color: var(--muted); margin: 0 0 16px; }
+    pre { background: var(--code); color: #e8f2ef; padding: 12px 14px; border-radius: 10px; font-size: 13px; overflow: auto; font-family: Consolas, monospace; }
+    ul { margin: 6px 0; padding-left: 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+    th { background: #eef6f5; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .brand-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 10px; margin-bottom: 18px; }
+    .brand-header img { height: 58px; width: auto; }
+    .brand-header .session { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--teal); text-align: right; }
+    .print-footer { margin-top: 22px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 11px; color: var(--muted); text-align: center; }
+    @page { size: A4; margin: 24mm 14mm 18mm 14mm; }
+    @media print { body { padding: 0; } .brand-header, .print-footer { display: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="brand-header">
+    <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+    <div class="session">Go Programming Master Course<br>Week 7 · Day 1</div>
+  </header>
+  <h1>Week 7, Day 1 — student handout</h1>
+  <p class="sub">Umesh Indrajith · In-memory students. No DB / JWT.</p>
+
+  <h2>Outcomes</h2>
+  <ul>
+    <li>Structs + JSON tags (<code>first_name</code> style).</li>
+    <li>In-memory <code>map[int]Student</code>.</li>
+    <li><code>POST</code> / <code>GET</code> / <code>GET :id</code> for students.</li>
+    <li>400 on bad JSON; 404 when missing.</li>
+  </ul>
+
+  <h2>Model</h2>
+<pre>type Student struct {
+    ID        int    `json:"id"`
+    FirstName string `json:"first_name"`
+    LastName  string `json:"last_name"`
+    Email     string `json:"email"`
+    Phone     string `json:"phone"`
+    Course    string `json:"course"`
+}</pre>
+
+  <h2>Routes</h2>
+<pre>POST /api/students
+GET  /api/students
+GET  /api/students/:id</pre>
+
+  <h2>Postman body</h2>
+<pre>{
+  "first_name": "Ada",
+  "last_name": "Lovelace",
+  "email": "ada@example.com",
+  "phone": "0770000000",
+  "course": "SE"
+}</pre>
+
+  <div class="cols">
+    <div>
+      <h2>Status</h2>
+      <table>
+        <tr><th>Code</th><th>When</th></tr>
+        <tr><td>201</td><td>Created</td></tr>
+        <tr><td>200</td><td>List / get</td></tr>
+        <tr><td>400</td><td>Bad JSON</td></tr>
+        <tr><td>404</td><td>Unknown id</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>If it breaks</h2>
+      <ul>
+        <li>FirstName in JSON → add tags</li>
+        <li>always 400 → fix JSON / Content-Type</li>
+        <li>404 on good id → Atoi the param</li>
+        <li>empty list → server restarted?</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Homework</h2>
+  <p><code>PUT</code> + <code>DELETE</code> by id. Details: <code>homework.md</code>.</p>
+  <p class="print-footer">Epic Learn Institute of Higher Education - Go Programming Master Course</p>
+</body>
+</html>

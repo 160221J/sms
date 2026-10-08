@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Week 7 lab sheet — Epic Learn Go</title>
+  <style>
+    body { font-family: "Segoe UI", Calibri, system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 28px; color: #14202b; }
+    h1 { font-size: 24px; margin-bottom: 4px; }
+    .sub { color: #4d5d6b; margin-top: 0; }
+    .box { border: 2px solid #0b6e68; border-radius: 12px; padding: 12px 16px; margin: 16px 0; }
+    label { display: block; padding: 8px 0; font-size: 17px; border-bottom: 1px solid #eee; }
+    input[type=checkbox] { width: 18px; height: 18px; margin-right: 10px; }
+    input[type=text] { width: 100%; font-size: 16px; padding: 8px; margin-top: 6px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    td { border: 1px solid #d8cfc2; height: 36px; padding: 6px; }
+    .brand-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid #d8cfc2; padding-bottom: 10px; margin-bottom: 16px; }
+    .brand-header img { height: 58px; width: auto; }
+    .brand-header .session { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #0b6e68; text-align: right; }
+    footer { margin-top: 20px; font-size: 13px; color: #4d5d6b; }
+    .print-footer { margin-top: 16px; padding-top: 10px; border-top: 1px solid #d8cfc2; font-size: 11px; color: #4d5d6b; text-align: center; }
+    @page { size: A4; margin: 24mm 14mm 18mm 14mm; }
+    @media print { body { padding: 0; } .brand-header, .print-footer { display: none !important; } }
+  </style>
+</head>
+<body>
+  <header class="brand-header">
+    <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+    <div class="session">Go Programming Master Course<br>Week 7 · Day 1</div>
+  </header>
+  <h1>Lab gate — Week 7, Day 1</h1>
+  <p class="sub">Name: _______________________</p>
+
+  <div class="box">
+    <strong>Done only when every box is ticked.</strong>
+    <label><input type="checkbox" /> <code>models.Student</code> with <code>first_name</code>-style JSON tags</label>
+    <label><input type="checkbox" /> Postman <strong>POST /api/students</strong> → 201</label>
+    <label><input type="checkbox" /> Postman <strong>GET /api/students</strong> shows the new row</label>
+    <label><input type="checkbox" /> <strong>GET /api/students/:id</strong> works; unknown id → 404</label>
+    <label><input type="checkbox" /> Broken JSON → 400</label>
+    <label><input type="checkbox" /> Health still 200; PR/commit started</label>
+  </div>
+
+  <p><strong>PR URL</strong></p>
+  <input type="text" placeholder="https://github.com/…/pull/…" />
+
+  <p><strong>Paste one created student id</strong></p>
+  <input type="text" placeholder="1" />
+
+  <p><strong>Instructor sign-off</strong></p>
+  <table>
+    <tr><td>Seen create + list</td><td>Initials</td><td>Time</td></tr>
+    <tr><td></td><td></td><td></td></tr>
+  </table>
+
+  <footer>Homework: PUT + DELETE. Still no JWT / Postgres.</footer>
+  <p class="print-footer">Epic Learn Institute of Higher Education - Go Programming Master Course</p>
+</body>
+</html>
