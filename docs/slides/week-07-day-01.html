@@ -315,7 +315,7 @@
           <h2>If Day 1 of week 7 works, you can</h2>
           <ul>
             <li>Define a struct with exported fields and composite literals.</li>
-            <li>Round-trip JSON with tags like <code>` + "`json:\\\"first_name\\\"`" + `</code>.</li>
+            <li>Round-trip JSON with tags like <code>` + "`json:\"first_name\"`" + `</code>.</li>
             <li>Explain a tiny interface (<code>error</code>) and “accept interfaces, return structs”.</li>
             <li>Store students in a <code>map[int]Student</code> (or slice).</li>
             <li>Ship <code>POST /api/students</code>, <code>GET /api/students</code>, <code>GET /api/students/:id</code>.</li>
@@ -362,11 +362,11 @@ fmt.Println(s.FirstName)</pre>
           <div class="kicker">JSON tags</div>
           <h2>Wire names that match the API</h2>
           <pre>type Student struct {
-    ID        int    ` + "`json:\\\"id\\\"`" + `
-    FirstName string ` + "`json:\\\"first_name\\\"`" + `
-    LastName  string ` + "`json:\\\"last_name\\\"`" + `
-    Email     string ` + "`json:\\\"email\\\"`" + `
-    Course    string ` + "`json:\\\"course\\\"`" + `
+    ID        int    ` + "`json:\"id\"`" + `
+    FirstName string ` + "`json:\"first_name\"`" + `
+    LastName  string ` + "`json:\"last_name\"`" + `
+    Email     string ` + "`json:\"email\"`" + `
+    Course    string ` + "`json:\"course\"`" + `
 }</pre>
           <ul class="small">
             <li>Without tags, JSON would say <code>FirstName</code>. We want <code>first_name</code>.</li>
@@ -395,10 +395,10 @@ fmt.Println(s.FirstName)</pre>
           <div class="kicker">Embedding · light</div>
           <h2>Composition, not inheritance</h2>
           <pre>type Timestamps struct {
-    CreatedAt time.Time ` + "`json:\\\"created_at\\\"`" + `
+    CreatedAt time.Time ` + "`json:\"created_at\"`" + `
 }
 type Student struct {
-    ID int ` + "`json:\\\"id\\\"`" + `
+    ID int ` + "`json:\"id\"`" + `
     Timestamps // embeds fields
 }</pre>
           <ul class="small">
@@ -477,12 +477,12 @@ No JWT. No Postgres.</pre>
           <h2>Add <code>internal/models/student.go</code></h2>
           <pre>package models
 type Student struct {
-    ID        int    ` + "`json:\\\"id\\\"`" + `
-    FirstName string ` + "`json:\\\"first_name\\\"`" + `
-    LastName  string ` + "`json:\\\"last_name\\\"`" + `
-    Email     string ` + "`json:\\\"email\\\"`" + `
-    Phone     string ` + "`json:\\\"phone\\\"`" + `
-    Course    string ` + "`json:\\\"course\\\"`" + `
+    ID        int    ` + "`json:\"id\"`" + `
+    FirstName string ` + "`json:\"first_name\"`" + `
+    LastName  string ` + "`json:\"last_name\"`" + `
+    Email     string ` + "`json:\"email\"`" + `
+    Phone     string ` + "`json:\"phone\"`" + `
+    Course    string ` + "`json:\"course\"`" + `
 }</pre>
         `,
         notes: "Skip time.Time DOB in live if slow; string DOB ok for week 7."
