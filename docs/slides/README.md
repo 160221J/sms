@@ -2,7 +2,7 @@
 
 Open the `.html` file in a browser. **F** fullscreen, arrows to move, **N** speaker notes, **P** print to PDF.
 
-Each session also has a full teaching kit (handout, lab sheet, homework): [../week-01-day-01/](../week-01-day-01/) · [../week-02-day-01/](../week-02-day-01/) · [../week-03-day-01/](../week-03-day-01/) · [../week-04-day-01/](../week-04-day-01/) · [../week-05-day-01/](../week-05-day-01/) · [../week-06-day-01/](../week-06-day-01/) · [../week-07-day-01/](../week-07-day-01/).
+Each session also has a full teaching kit (handout, lab sheet, homework): [../week-01-day-01/](../week-01-day-01/) · [../week-02-day-01/](../week-02-day-01/) · [../week-03-day-01/](../week-03-day-01/) · [../week-04-day-01/](../week-04-day-01/) · [../week-05-day-01/](../week-05-day-01/) · [../week-06-day-01/](../week-06-day-01/) · [../week-07-day-01/](../week-07-day-01/) · [../week-08-day-01/](../week-08-day-01/).
 
 | Session | Deck | Presenter notes | PowerPoint |
 | --- | --- | --- | --- |
@@ -13,3 +13,4 @@ Each session also has a full teaching kit (handout, lab sheet, homework): [../we
 | Week 5, Day 1 | [week-05-day-01.html](week-05-day-01.html) | [week-05-day-01-notes.md](week-05-day-01-notes.md) | [slides.pptx](../week-05-day-01/pdf/week-05-day-01-slides.pptx) |
 | Week 6, Day 1 | [week-06-day-01.html](week-06-day-01.html) | [week-06-day-01-notes.md](week-06-day-01-notes.md) | [slides.pptx](../week-06-day-01/pdf/week-06-day-01-slides.pptx) |
 | Week 7, Day 1 | [week-07-day-01.html](week-07-day-01.html) | [week-07-day-01-notes.md](week-07-day-01-notes.md) | [slides.pptx](../week-07-day-01/pdf/week-07-day-01-slides.pptx) |
+| Week 8, Day 1 | [week-08-day-01.html](week-08-day-01.html) | [week-08-day-01-notes.md](week-08-day-01-notes.md) | [slides.pptx](../week-08-day-01/pdf/week-08-day-01-slides.pptx) |
