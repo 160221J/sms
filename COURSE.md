@@ -344,6 +344,10 @@ Hands-on clock starts here (project week 1 of ~12).
 
 ### Week 09 — Errors, wrapping, validation, slog, JWT preview
 
+**Day 1 materials (full kit):** [docs/week-09-day-01/](docs/week-09-day-01/) — slides, presenter notes, student handout, lab sheet, troubleshooting, homework. **Printable PDFs + editable PPTX:** [docs/week-09-day-01/pdf/](docs/week-09-day-01/pdf/)
+
+**Day 1 slides:** [docs/slides/week-09-day-01.html](docs/slides/week-09-day-01.html) · [presenter notes](docs/slides/week-09-day-01-notes.md)
+
 **Language / SE**
 
 - `error` as a value; sentinel vs custom types

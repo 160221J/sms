@@ -1,0 +1,4 @@
+markdown
+pypdf
+reportlab
+python-pptx

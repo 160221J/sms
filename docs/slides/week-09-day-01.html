@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 9 · Day 1 — Go Programming Master Course · Epic Learn</title>
+  <style>
+    :root {
+      --ink: #14202b;
+      --muted: #4d5d6b;
+      --paper: #f4efe6;
+      --card: #fffdf9;
+      --line: #d8cfc2;
+      --teal: #0b6e68;
+      --teal-dark: #084f4b;
+      --rust: #c24e1d;
+      --gold: #c9a227;
+      --code: #10212c;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #0e181f;
+      color: var(--ink);
+      font-family: "Segoe UI", "Calibri", "Liberation Sans", system-ui, sans-serif;
+    }
+    .deck {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .slides {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 96px 72px 88px;
+      background:
+        radial-gradient(900px 420px at 100% -10%, rgba(11, 110, 104, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--paper), #efe7d9);
+    }
+    .slide.on { display: flex; flex-direction: column; }
+    .slide.title-slide {
+      justify-content: flex-end;
+      background:
+        linear-gradient(180deg, rgba(8, 31, 36, 0.15), rgba(8, 31, 36, 0.55)),
+        linear-gradient(135deg, #0b6e68 0%, #14202b 55%, #c24e1d 140%);
+      color: #f7f1e6;
+    }
+    .kicker {
+      font-size: 15px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .title-slide .kicker { color: #ead9a3; }
+    h1 {
+      font-size: 54px;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      letter-spacing: -0.03em;
+      max-width: 16ch;
+    }
+    h2 {
+      font-size: 40px;
+      line-height: 1.15;
+      margin: 0 0 28px;
+      letter-spacing: -0.03em;
+    }
+    .lede {
+      font-size: 26px;
+      line-height: 1.35;
+      color: var(--muted);
+      max-width: 32em;
+      margin: 0 0 28px;
+    }
+    .title-slide .lede { color: #e7ddd0; max-width: 22em; }
+    .meta { font-size: 18px; color: #d7cbb8; margin-top: 28px; }
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 28px;
+      line-height: 1.35;
+    }
+    ul li {
+      position: relative;
+      padding: 10px 0 10px 36px;
+    }
+    ul li::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--teal);
+      position: absolute;
+      left: 0;
+      top: 1.05em;
+    }
+    ul.small { font-size: 22px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px 24px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: var(--teal-dark);
+    }
+    .card p, .card li { font-size: 20px; line-height: 1.4; margin: 0; color: var(--ink); }
+    .card ul li { padding-left: 24px; font-size: 20px; }
+    .card ul li::before { width: 8px; height: 8px; top: 0.85em; background: var(--rust); }
+    pre {
+      margin: 0;
+      background: var(--code);
+      color: #e8f2ef;
+      border-radius: 16px;
+      padding: 22px 26px;
+      font-size: 20px;
+      line-height: 1.45;
+      overflow: auto;
+      font-family: "Cascadia Code", "Consolas", "Liberation Mono", monospace;
+    }
+    .tag {
+      display: inline-block;
+      background: var(--teal);
+      color: white;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .demo .tag { background: var(--rust); }
+    .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; align-items: start; }
+    .brand-header {
+      position: absolute;
+      top: 18px;
+      left: 56px;
+      right: 56px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2;
+    }
+    .brand-header img {
+      height: 56px;
+      width: auto;
+      display: block;
+      background: #fff;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .brand-header .session {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+    }
+    .title-slide .brand-header .session { color: #ead9a3; }
+    .foot {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    .foot .org {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .title-slide .foot {
+      color: #d8cbb8;
+      border-top-color: rgba(255,255,255,0.25);
+    }
+    .bar {
+      height: 6px;
+      background: #d5cdc0;
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+    }
+    .bar > span {
+      display: block;
+      height: 100%;
+      background: var(--teal);
+      width: 0%;
+    }
+    .notes {
+      display: none;
+      background: #10212c;
+      color: #e8f2ef;
+      padding: 12px 72px;
+      font-size: 15px;
+      line-height: 1.4;
+      max-height: 28vh;
+      overflow: auto;
+    }
+    .notes.on { display: block; }
+    .help {
+      display: none;
+      position: absolute;
+      right: 28px;
+      top: 28px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      z-index: 5;
+    }
+    .help.on { display: block; }
+    strong { color: var(--teal-dark); }
+    .title-slide strong { color: #fff; }
+    .big { font-size: 34px; line-height: 1.35; max-width: 22em; margin: 0; }
+    .center {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .title-slide.center {
+      justify-content: center;
+    }
+    .title-slide.center h1 {
+      max-width: none;
+      font-size: 88px;
+    }
+    @page { size: 13.333in 7.5in; margin: 0; }
+    @media print {
+      html, body, .deck, .slides {
+        height: auto !important;
+        overflow: visible !important;
+        background: white !important;
+      }
+      .notes, .help, .bar, .brand-header, .foot { display: none !important; }
+      .slide {
+        display: flex !important;
+        position: relative !important;
+        inset: auto !important;
+        height: 7.5in;
+        width: 13.333in;
+        padding: 78px 64px 48px;
+        page-break-after: always;
+        break-after: page;
+        overflow: hidden;
+      }
+      .slide:last-child { page-break-after: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <div class="slides" id="slides"></div>
+    <div class="notes" id="notes"></div>
+  </div>
+  <div class="help" id="help">
+    ← → space · F fullscreen · N notes · P print/PDF · ? help
+  </div>
+  <script>
+    const slides = [
+      {
+        titleSlide: true,
+        html: `
+          <div class="kicker">Go Programming Master Course</div>
+          <h1>Week 9, Day 1</h1>
+          <p class="lede">Errors, wrapping, validation, slog — and a light register/login preview. Still no Postgres.</p>
+          <p class="meta">Umesh Indrajith · BSc Eng (Hons), University of Moratuwa<br>Senior Software Engineer / Lecturer</p>
+        `,
+        notes: "Week 8 handler→repo must exist. Today: ErrNotFound→404, consistent error JSON, slog, config. Auth register optional if time."
+      },
+      {
+        html: `
+          <div class="kicker">Since last week</div>
+          <h2>Repo owns the map. Handlers own HTTP status.</h2>
+          <ul class="small">
+            <li>Create / list / get still green through <code>StudentRepository</code>.</li>
+            <li>Cold-call: what does <code>ok == false</code> mean in GetByID? Why not panic?</li>
+            <li>Today we replace bool with real <code>error</code> values — and log properly.</li>
+            <li>JWT middleware can wait; prefer register/login without locking student routes.</li>
+          </ul>
+        `,
+        notes: "Fix broken week-8 extracts in first 10 minutes only."
+      },
+      {
+        html: `
+          <div class="kicker">Today</div>
+          <h2>If Day 1 of week 9 works, you can</h2>
+          <ul class="small">
+            <li>Treat <code>error</code> as a value; use a sentinel <code>ErrNotFound</code>.</li>
+            <li>Wrap with <code>%w</code>; check with <code>errors.Is</code> / <code>errors.As</code>.</li>
+            <li>Never panic in an HTTP handler — return <code>{"error":"..."}</code>.</li>
+            <li>Validate with Gin <code>binding</code>; log 5xx with <code>log/slog</code>.</li>
+            <li>Load config from env (<code>.env.example</code>, never commit secrets).</li>
+          </ul>
+        `,
+        notes: "Lab: ErrNotFound map. Homework: slog + .env.example. Auth stretch."
+      },
+      {
+        html: `
+          <div class="kicker">Software engineering</div>
+          <h2>Errors are part of the API contract</h2>
+          <p class="lede">Clients and operators need predictable JSON and logs. A panic is a bug, not a status code.</p>
+          <ul class="small">
+            <li>Same shape everywhere: <code>{"error":"student not found"}</code>.</li>
+            <li>4xx = client problem. 5xx = our problem — and we log it.</li>
+            <li>Secrets live in environment variables, not in git.</li>
+          </ul>
+        `,
+        notes: "Write the JSON contract on the board."
+      },
+      {
+        html: `
+          <div class="kicker">error as a value</div>
+          <h2>The second return is the handshake</h2>
+          <pre>s, err := repo.GetByID(id)
+if err != nil {
+    // decide: 404, 400, or 500 — do not panic
+    return
+}
+c.JSON(http.StatusOK, s)</pre>
+          <ul class="small">
+            <li>Ignoring <code>err</code> with <code>_</code> needs a spoken reason.</li>
+            <li><code>error</code> is an interface: anything with <code>Error() string</code>.</li>
+          </ul>
+        `,
+        notes: "Connect to week 6/7 multiple returns."
+      },
+      {
+        html: `
+          <div class="kicker">Sentinel vs custom</div>
+          <h2>Name the expected failures</h2>
+          <pre>var ErrNotFound = errors.New("not found")
+
+// later, richer:
+type ValidationError struct { Field, Msg string }
+func (e ValidationError) Error() string { return e.Field + ": " + e.Msg }</pre>
+          <ul class="small">
+            <li>Sentinel: package-level <code>var ErrX = errors.New(...)</code> — compare with <code>errors.Is</code>.</li>
+            <li>Custom type: when you need fields; unwrap with <code>errors.As</code>.</li>
+            <li>Lab uses a sentinel <code>ErrNotFound</code>.</li>
+          </ul>
+        `,
+        notes: "Prefer sentinel for not-found this week."
+      },
+      {
+        html: `
+          <div class="kicker">Wrapping</div>
+          <h2><code>%w</code>, <code>Is</code>, and <code>As</code></h2>
+          <pre>if err != nil {
+    return fmt.Errorf("get student %d: %w", id, err)
+}
+if errors.Is(err, apperrors.ErrNotFound) {
+    c.JSON(404, gin.H{"error": "student not found"})
+    return
+}</pre>
+          <ul class="small">
+            <li><code>%w</code> preserves the chain so callers can still <code>Is</code> the root cause.</li>
+            <li>Do not wrap away detail you need in logs — add context, keep the cause.</li>
+          </ul>
+        `,
+        notes: "Live one wrap + Is. Skip As unless someone asks."
+      },
+      {
+        html: `
+          <div class="kicker">HTTP mapping</div>
+          <h2>Repo returns errors · handler picks status</h2>
+          <ul class="small">
+            <li><code>errors.Is(err, ErrNotFound)</code> → <strong>404</strong></li>
+            <li>Bad input / bind failure → <strong>400</strong></li>
+            <li>Anything unexpected → <strong>500</strong> + <code>slog.Error</code></li>
+            <li>Never <code>panic(err)</code> inside a Gin handler.</li>
+          </ul>
+        `,
+        notes: "Board this table. Leave up for lab."
+      },
+      {
+        html: `
+          <div class="kicker">Validation</div>
+          <h2>Reject junk before it hits the repo</h2>
+          <pre>type CreateStudentRequest struct {
+    FirstName string &#96;json:"first_name" binding:"required"&#96;
+    Email     string &#96;json:"email" binding:"required,email"&#96;
+    Course    string &#96;json:"course" binding:"required"&#96;
+}
+if err := c.ShouldBindJSON(&amp;req); err != nil {
+    c.JSON(400, gin.H{"error": "invalid request"})
+    return
+}</pre>
+          <ul class="small">
+            <li>Match this repo’s <code>RegisterRequest</code> / <code>CreateStudentRequest</code> style.</li>
+            <li>Clear <code>error</code> string beats dumping raw validator text (optional polish).</li>
+          </ul>
+        `,
+        notes: "Show one 400 with missing email."
+      },
+      {
+        html: `
+          <div class="kicker">slog</div>
+          <h2>Structured logs, not <code>fmt.Println</code></h2>
+          <pre>slog.Info("student created", "student_id", s.ID)
+slog.Error("create failed", "err", err)</pre>
+          <ul class="small">
+            <li>JSON handler in production: level, msg, attrs.</li>
+            <li>Log 5xx with enough context to replay — never log passwords.</li>
+            <li>Homework: kill leftover print debugging.</li>
+          </ul>
+        `,
+        notes: "Set default JSON logger once in main."
+      },
+      {
+        html: `
+          <div class="kicker">Config</div>
+          <h2>Environment, not hard-coded secrets</h2>
+          <pre>// internal/config — shape like this repo
+type Config struct {
+    Port      string
+    JWTSecret string
+}
+// godotenv.Load() optional; os.Getenv wins
+// ship .env.example — never commit .env</pre>
+          <ul class="small">
+            <li>DB vars can appear in the struct now; we still do not connect Postgres this week.</li>
+            <li>Default port <code>:8080</code> if empty.</li>
+          </ul>
+        `,
+        notes: "Point at backend/internal/config/config.go."
+      },
+      {
+        html: `
+          <div class="kicker">Auth · light</div>
+          <h2>Hash passwords. Sign a string later.</h2>
+          <ul class="small">
+            <li><code>bcrypt</code>: store a hash, never the password.</li>
+            <li>JWT: a signed claim string — middleware can wait until week 15 if slow.</li>
+            <li>Prefer <code>POST /api/register</code> (+ login) <strong>without</strong> locking student routes yet.</li>
+          </ul>
+        `,
+        notes: "Pace valve. Register in-memory is enough for the stretch."
+      },
+      {
+        html: `
+          <div class="kicker">JWT preview</div>
+          <h2>One slide — then stop</h2>
+          <pre>// idea only: header.payload.signature
+// payload might carry user_id + exp
+// verify signature with JWT_SECRET from config</pre>
+          <ul class="small">
+            <li>Product story: login returns a token; later middleware checks it.</li>
+            <li>Do not protect <code>/api/students</code> today unless the room is flying.</li>
+          </ul>
+        `,
+        notes: "Show LoginResponse shape from models/user.go if useful."
+      },
+      {
+        html: `
+          <div class="kicker">SMS milestone</div>
+          <h2>Consistent errors + logs</h2>
+          <pre>GET /api/students/:id missing → 404 {"error":"student not found"}
+Unexpected repo failure → 500 + slog.Error
+Optional: POST /api/register (in-memory users)</pre>
+          <ul class="small">
+            <li>Files to teach toward: <code>auth_handler.go</code>, <code>models/user.go</code>, <code>config/config.go</code>.</li>
+            <li>Still no Postgres. Restart still clears memory.</li>
+          </ul>
+        `,
+        notes: "Board lab vs stretch."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo</div>
+          <div class="kicker">ErrNotFound</div>
+          <h2>Sentinel from repo → 404 in handler</h2>
+          <pre>// repository
+if !ok { return models.Student{}, apperrors.ErrNotFound }
+
+// handler
+if errors.Is(err, apperrors.ErrNotFound) {
+    c.JSON(404, gin.H{"error": "student not found"})
+    return
+}
+slog.Error("get student", "id", id, "err", err)
+c.JSON(500, gin.H{"error": "internal error"})</pre>
+        `,
+        notes: "Live curl missing id."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo</div>
+          <div class="kicker">slog + config</div>
+          <h2>JSON logs and <code>.env.example</code></h2>
+          <pre>slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
+cfg := config.Load()
+r.Run(":" + cfg.Port) // default 8080
+
+# .env.example
+PORT=8080
+JWT_SECRET=change-me</pre>
+        `,
+        notes: "Show one JSON log line in the terminal."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo · stretch</div>
+          <div class="kicker">Register</div>
+          <h2><code>POST /api/register</code> in memory</h2>
+          <pre>// bcrypt hash → store User (password_hash omitted in JSON)
+// conflict on duplicate username → 409
+// Do not protect student routes yet</pre>
+          <ul class="small">
+            <li>Skip live if ErrNotFound lab needs the rest of class.</li>
+          </ul>
+        `,
+        notes: "Optional. Point at this repo’s AuthHandler shape."
+      },
+      {
+        html: `
+          <div class="kicker">Lab · rest of class</div>
+          <h2>Done when all of this is true</h2>
+          <ul class="small">
+            <li><code>ErrNotFound</code> defined; repo returns it for missing students</li>
+            <li>Handler maps not-found → 404; unexpected → 500 + slog</li>
+            <li>Bind failures → 400 with <code>{"error":...}</code></li>
+            <li>No panics on the student paths</li>
+            <li>Health still green; PR started</li>
+          </ul>
+        `,
+        notes: "Gate on board. Register is stretch."
+      },
+      {
+        html: `
+          <div class="kicker">Homework</div>
+          <h2><code>slog</code> + <code>.env.example</code></h2>
+          <ul class="small">
+            <li>Replace <code>fmt.Println</code> debugging with <code>slog</code> (Info/Error + attrs).</li>
+            <li>Add <code>.env.example</code> (PORT, JWT_SECRET placeholders). Keep <code>.env</code> gitignored.</li>
+            <li>Wire <code>internal/config</code> for port (and JWT secret for later).</li>
+            <li>Stretch: in-memory register (+ login token if ready).</li>
+          </ul>
+        `,
+        notes: "Homework sheet has the checklist."
+      },
+      {
+        html: `
+          <div class="kicker">Next session</div>
+          <h2>Week 10 — goroutines and the scheduler</h2>
+          <ul class="small">
+            <li>Concurrency vs parallelism; <code>go f()</code>.</li>
+            <li>Why handlers must not fire-and-forget without a plan.</li>
+            <li>Bring clean error mapping and slog.</li>
+          </ul>
+        `,
+        notes: "Do not teach channels today."
+      },
+      {
+        html: `
+          <div class="kicker">Words to keep</div>
+          <h2>Say these correctly next week</h2>
+          <div class="grid">
+            <div class="card"><h3>Sentinel</h3><p>Named error value; compare with errors.Is.</p></div>
+            <div class="card"><h3>Wrap</h3><p>fmt.Errorf with %w keeps the cause.</p></div>
+            <div class="card"><h3>slog</h3><p>Structured logs with level + attrs.</p></div>
+            <div class="card"><h3>Config</h3><p>Secrets from env; example file only in git.</p></div>
+          </div>
+        `,
+        notes: "Oral quiz."
+      },
+      {
+        html: `
+          <div class="kicker">Layout reminder</div>
+          <h2>Where the new files live</h2>
+          <pre>backend/
+  .env.example
+  cmd/server/main.go
+  internal/config/config.go
+  internal/apperrors/errors.go      # ErrNotFound
+  internal/models/{student,user}.go
+  internal/repository/...
+  internal/handlers/{student,auth}.go</pre>
+        `,
+        notes: "Auth handler optional for lab gate."
+      },
+      {
+        html: `
+          <div class="kicker">Honest limits</div>
+          <h2>What this week is not</h2>
+          <ul class="small">
+            <li>Not Postgres — users/students still in memory.</li>
+            <li>Not full auth middleware on every route.</li>
+            <li>Not a logging platform — stdout JSON is enough.</li>
+            <li>Not panicking “to be honest” in handlers.</li>
+          </ul>
+        `,
+        notes: "Keep spiral honest."
+      },
+      {
+        html: `
+          <div class="kicker">Safety</div>
+          <h2>Secrets and passwords</h2>
+          <ul class="small">
+            <li>Never commit <code>.env</code> or real JWT secrets.</li>
+            <li>Never log raw passwords or full tokens.</li>
+            <li><code>gofmt</code>; no binaries in git.</li>
+          </ul>
+        `,
+        notes: "Quick."
+      },
+      {
+        html: `
+          <div class="kicker">Review bar</div>
+          <h2>Instructor merges when</h2>
+          <ul class="small">
+            <li>Missing student → 404 JSON, not panic / empty 200</li>
+            <li>Unexpected errors → 500 + slog (evidence in PR)</li>
+            <li><code>.env.example</code> present; <code>.env</code> absent from git</li>
+            <li>gofmt clean; PR describes error mapping</li>
+          </ul>
+        `,
+        notes: "Collect PR URLs."
+      },
+      {
+        titleSlide: true,
+        cls: "center",
+        html: `
+          <h1>Questions</h1>
+        `,
+        notes: "Then ErrNotFound live → slog → lab."
+      }
+    ];
+
+
+    const root = document.getElementById("slides");
+    const notesEl = document.getElementById("notes");
+    const help = document.getElementById("help");
+    let i = 0;
+    let notesOn = false;
+
+    slides.forEach((s, idx) => {
+      const el = document.createElement("section");
+      el.className = "slide" + (s.titleSlide ? " title-slide" : "") + (s.cls ? " " + s.cls : "");
+      el.innerHTML = `
+        <header class="brand-header">
+          <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+          <div class="session">Week 9 · Day 1</div>
+        </header>
+        ` + s.html + `
+        <div class="foot">
+          <span class="org">Epic Learn Institute of Higher Education - Go Programming Master Course</span>
+          <span>${idx + 1} / ${slides.length}</span>
+        </div>
+        <div class="bar"><span></span></div>`;
+      root.appendChild(el);
+    });
+
+    function show(n) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      [...root.children].forEach((el, idx) => {
+        el.classList.toggle("on", idx === i);
+        el.querySelector(".bar > span").style.width = ((i + 1) / slides.length * 100) + "%";
+      });
+      notesEl.textContent = "Note: " + slides[i].notes;
+      location.hash = String(i + 1);
+    }
+
+    function parseHash() {
+      const n = parseInt(location.hash.replace("#", ""), 10);
+      show(Number.isFinite(n) ? n - 1 : 0);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); show(i + 1); }
+      if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); show(i - 1); }
+      if (e.key === "Home") show(0);
+      if (e.key === "End") show(slides.length - 1);
+      if (e.key === "n" || e.key === "N") { notesOn = !notesOn; notesEl.classList.toggle("on", notesOn); }
+      if (e.key === "?" || e.key === "h") help.classList.toggle("on");
+      if (e.key === "f" || e.key === "F") {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+      }
+      if (e.key === "p" || e.key === "P") window.print();
+    });
+
+    document.getElementById("slides").addEventListener("click", (e) => {
+      if (e.clientX > innerWidth * 0.6) show(i + 1);
+      else if (e.clientX < innerWidth * 0.4) show(i - 1);
+    });
+
+    window.addEventListener("hashchange", parseHash);
+    parseHash();
+  </script>
+</body>
+</html>
