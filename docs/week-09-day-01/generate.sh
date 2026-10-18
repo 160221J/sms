@@ -10,13 +10,20 @@ if ! command -v python3 >/dev/null; then
   exit 1
 fi
 
-if [[ ! -x "$VENV/bin/python" ]]; then
-  python3 -m venv "$VENV"
+PY=python3
+if python3 -m venv "$VENV" 2>/dev/null && [[ -x "$VENV/bin/python" ]]; then
+  "$VENV/bin/pip" install -q -r "$REQ"
+  PY="$VENV/bin/python"
+else
+  # Fallback when ensurepip/venv is unavailable (some cloud images).
+  SITE="$VENV/lib/python3.12/site-packages"
+  mkdir -p "$SITE"
+  python3 -m pip install -q --target "$SITE" -r "$REQ"
+  export PYTHONPATH="$SITE${PYTHONPATH:+:$PYTHONPATH}"
 fi
-"$VENV/bin/pip" install -q -r "$REQ"
 
 if [[ "${1:-}" == "--pptx-only" ]]; then
-  exec "$VENV/bin/python" "$ROOT/docs/week-09-day-01/build_editable_pptx.py"
+  exec "$PY" "$ROOT/docs/week-09-day-01/build_editable_pptx.py"
 fi
 
-exec "$VENV/bin/python" "$ROOT/docs/week-09-day-01/generate-pdfs.py"
+exec "$PY" "$ROOT/docs/week-09-day-01/generate-pdfs.py"
