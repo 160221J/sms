@@ -370,6 +370,10 @@ Hands-on clock starts here (project week 1 of ~12).
 
 ### Week 10 — Goroutines and the scheduler
 
+**Day 1 materials (full kit):** [docs/week-10-day-01/](docs/week-10-day-01/) — slides, presenter notes, student handout, lab sheet, troubleshooting, homework. **Printable PDFs + editable PPTX:** [docs/week-10-day-01/pdf/](docs/week-10-day-01/pdf/)
+
+**Day 1 slides:** [docs/slides/week-10-day-01.html](docs/slides/week-10-day-01.html) · [presenter notes](docs/slides/week-10-day-01-notes.md)
+
 **Language**
 
 - Concurrency vs parallelism
