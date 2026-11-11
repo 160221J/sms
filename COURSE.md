@@ -419,6 +419,10 @@ If the group is struggling, do the worker pool as a **kata** (thumbnail resizer 
 
 ### Week 12 — Mutex, WaitGroup, context, races
 
+**Day 1 materials (full kit):** [docs/week-12-day-01/](docs/week-12-day-01/) — slides, presenter notes, student handout, lab sheet, troubleshooting, homework. **Printable PDFs + editable PPTX:** [docs/week-12-day-01/pdf/](docs/week-12-day-01/pdf/)
+
+**Day 1 slides:** [docs/slides/week-12-day-01.html](docs/slides/week-12-day-01.html) · [presenter notes](docs/slides/week-12-day-01-notes.md)
+
 **Language / SE**
 
 - `sync.Mutex`, `RWMutex`
