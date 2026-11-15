@@ -1,0 +1,4 @@
+markdown
+pypdf==5.1.0
+reportlab
+python-pptx

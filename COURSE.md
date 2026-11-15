@@ -396,6 +396,10 @@ Safer lab: fan-out three independent validations with goroutines and collect err
 
 ### Week 11 — Channels, pipelines, worker pool
 
+**Day 1 materials (full kit):** [docs/week-11-day-01/](docs/week-11-day-01/) — slides, presenter notes, student handout, lab sheet, troubleshooting, homework. **Printable PDFs + editable PPTX:** [docs/week-11-day-01/pdf/](docs/week-11-day-01/pdf/)
+
+**Day 1 slides:** [docs/slides/week-11-day-01.html](docs/slides/week-11-day-01.html) · [presenter notes](docs/slides/week-11-day-01-notes.md)
+
 **Language**
 
 - Unbuffered vs buffered vs directional channels

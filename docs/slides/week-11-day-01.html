@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 11 · Day 1 — Go Programming Master Course · Epic Learn</title>
+  <style>
+    :root {
+      --ink: #14202b;
+      --muted: #4d5d6b;
+      --paper: #f4efe6;
+      --card: #fffdf9;
+      --line: #d8cfc2;
+      --teal: #0b6e68;
+      --teal-dark: #084f4b;
+      --rust: #c24e1d;
+      --gold: #c9a227;
+      --code: #10212c;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #0e181f;
+      color: var(--ink);
+      font-family: "Segoe UI", "Calibri", "Liberation Sans", system-ui, sans-serif;
+    }
+    .deck {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .slides {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 96px 72px 88px;
+      background:
+        radial-gradient(900px 420px at 100% -10%, rgba(11, 110, 104, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--paper), #efe7d9);
+    }
+    .slide.on { display: flex; flex-direction: column; }
+    .slide.title-slide {
+      justify-content: flex-end;
+      background:
+        linear-gradient(180deg, rgba(8, 31, 36, 0.15), rgba(8, 31, 36, 0.55)),
+        linear-gradient(135deg, #0b6e68 0%, #14202b 55%, #c24e1d 140%);
+      color: #f7f1e6;
+    }
+    .kicker {
+      font-size: 15px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .title-slide .kicker { color: #ead9a3; }
+    h1 {
+      font-size: 54px;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      letter-spacing: -0.03em;
+      max-width: 16ch;
+    }
+    h2 {
+      font-size: 40px;
+      line-height: 1.15;
+      margin: 0 0 28px;
+      letter-spacing: -0.03em;
+    }
+    .lede {
+      font-size: 26px;
+      line-height: 1.35;
+      color: var(--muted);
+      max-width: 32em;
+      margin: 0 0 28px;
+    }
+    .title-slide .lede { color: #e7ddd0; max-width: 22em; }
+    .meta { font-size: 18px; color: #d7cbb8; margin-top: 28px; }
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 28px;
+      line-height: 1.35;
+    }
+    ul li {
+      position: relative;
+      padding: 10px 0 10px 36px;
+    }
+    ul li::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--teal);
+      position: absolute;
+      left: 0;
+      top: 1.05em;
+    }
+    ul.small { font-size: 22px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px 24px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: var(--teal-dark);
+    }
+    .card p, .card li { font-size: 20px; line-height: 1.4; margin: 0; color: var(--ink); }
+    .card ul li { padding-left: 24px; font-size: 20px; }
+    .card ul li::before { width: 8px; height: 8px; top: 0.85em; background: var(--rust); }
+    pre {
+      margin: 0;
+      background: var(--code);
+      color: #e8f2ef;
+      border-radius: 16px;
+      padding: 22px 26px;
+      font-size: 20px;
+      line-height: 1.45;
+      overflow: auto;
+      font-family: "Cascadia Code", "Consolas", "Liberation Mono", monospace;
+    }
+    .tag {
+      display: inline-block;
+      background: var(--teal);
+      color: white;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .demo .tag { background: var(--rust); }
+    .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; align-items: start; }
+    .brand-header {
+      position: absolute;
+      top: 18px;
+      left: 56px;
+      right: 56px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2;
+    }
+    .brand-header img {
+      height: 56px;
+      width: auto;
+      display: block;
+      background: #fff;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .brand-header .session {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+    }
+    .title-slide .brand-header .session { color: #ead9a3; }
+    .foot {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    .foot .org {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .title-slide .foot {
+      color: #d8cbb8;
+      border-top-color: rgba(255,255,255,0.25);
+    }
+    .bar {
+      height: 6px;
+      background: #d5cdc0;
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+    }
+    .bar > span {
+      display: block;
+      height: 100%;
+      background: var(--teal);
+      width: 0%;
+    }
+    .notes {
+      display: none;
+      background: #10212c;
+      color: #e8f2ef;
+      padding: 12px 72px;
+      font-size: 15px;
+      line-height: 1.4;
+      max-height: 28vh;
+      overflow: auto;
+    }
+    .notes.on { display: block; }
+    .help {
+      display: none;
+      position: absolute;
+      right: 28px;
+      top: 28px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      z-index: 5;
+    }
+    .help.on { display: block; }
+    strong { color: var(--teal-dark); }
+    .title-slide strong { color: #fff; }
+    .big { font-size: 34px; line-height: 1.35; max-width: 22em; margin: 0; }
+    .center {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .title-slide.center {
+      justify-content: center;
+    }
+    .title-slide.center h1 {
+      max-width: none;
+      font-size: 88px;
+    }
+    @page { size: 13.333in 7.5in; margin: 0; }
+    @media print {
+      html, body, .deck, .slides {
+        height: auto !important;
+        overflow: visible !important;
+        background: white !important;
+      }
+      .notes, .help, .bar, .brand-header, .foot { display: none !important; }
+      .slide {
+        display: flex !important;
+        position: relative !important;
+        inset: auto !important;
+        height: 7.5in;
+        width: 13.333in;
+        padding: 78px 64px 48px;
+        page-break-after: always;
+        break-after: page;
+        overflow: hidden;
+      }
+      .slide:last-child { page-break-after: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <div class="slides" id="slides"></div>
+    <div class="notes" id="notes"></div>
+  </div>
+  <div class="help" id="help">
+    ← → space · F fullscreen · N notes · P print/PDF · ? help
+  </div>
+  <script>
+    const slides = [
+      {
+        titleSlide: true,
+        html: `
+          <div class="kicker">Go Programming Master Course</div>
+          <h1>Week 11, Day 1</h1>
+          <p class="lede">Channels, pipelines, and the worker pool — the concurrency pattern to keep.</p>
+          <p class="meta">Umesh Indrajith · BSc Eng (Hons), University of Moratuwa<br>Senior Software Engineer / Lecturer</p>
+        `,
+        notes: "Week 10: saw races, no naked go. Today: channels + worker pool kata. Import API is stretch."
+      },
+      {
+        html: `
+          <div class="kicker">Since last week</div>
+          <h2>You can start Gs. Now make them talk safely.</h2>
+          <ul class="small">
+            <li><code>go test -race</code> literacy; Create still sync.</li>
+            <li>Cold-call: what is a channel? (pipe between goroutines.)</li>
+            <li>Today: send/receive, close, range, <code>select</code>, pipeline, <strong>worker pool</strong>.</li>
+            <li>Mutex deep-dive still week 12 — pool uses WaitGroup as glue.</li>
+          </ul>
+        `,
+        notes: "Confirm nobody merged naked go into Create."
+      },
+      {
+        html: `
+          <div class="kicker">Today</div>
+          <h2>If Day 1 of week 11 works, you can</h2>
+          <ul class="small">
+            <li>Choose unbuffered vs buffered channels and say why.</li>
+            <li>Close a channel and <code>range</code> until drained.</li>
+            <li>Use <code>select</code> for multi-way wait (one live example).</li>
+            <li>Sketch a pipeline (stage → stage).</li>
+            <li>Implement a <strong>worker pool</strong> of N workers over a job channel.</li>
+          </ul>
+        `,
+        notes: "Import endpoint stretch if pool is solid."
+      },
+      {
+        html: `
+          <div class="kicker">Software engineering</div>
+          <h2>One pattern to remember: worker pool</h2>
+          <p class="lede">Bound concurrency. N workers pull jobs. Results (or errors) come back on another channel. No unbounded <code>go</code> per item.</p>
+          <ul class="small">
+            <li>SMS stretch: <code>POST /api/students/import</code> → <code>{created, failed}</code>.</li>
+            <li>If the room struggles: hash-list / resizer <strong>kata</strong> only; sketch import on the board.</li>
+          </ul>
+        `,
+        notes: "Write worker pool on the board and leave it up."
+      },
+      {
+        html: `
+          <div class="kicker">Channels</div>
+          <h2>Typed pipes between goroutines</h2>
+          <pre>ch := make(chan int)      // unbuffered
+ch := make(chan int, 8)   // buffered capacity 8
+ch &lt;- 1                   // send
+v := &lt;-ch                 // receive</pre>
+          <ul class="small">
+            <li>Unbuffered: send waits for receive (handshake).</li>
+            <li>Buffered: send waits only when full.</li>
+          </ul>
+        `,
+        notes: "Live tiny send/receive."
+      },
+      {
+        html: `
+          <div class="kicker">Directional</div>
+          <h2>Make intent obvious at the boundary</h2>
+          <pre>func produce(out chan&lt;- int) { out &lt;- 42 }
+func consume(in &lt;-chan int) { fmt.Println(&lt;-in) }</pre>
+          <ul class="small">
+            <li><code>chan&lt;-</code> send-only · <code>&lt;-chan</code> receive-only.</li>
+            <li>Compiler stops accidental reverse use.</li>
+          </ul>
+        `,
+        notes: "Optional depth — show once."
+      },
+      {
+        html: `
+          <div class="kicker">Close + range</div>
+          <h2>Sender closes · receivers drain</h2>
+          <pre>close(ch)
+for v := range ch {
+    // runs until ch is closed and empty
+}
+v, ok := &lt;-ch // ok==false when closed and drained</pre>
+          <ul class="small">
+            <li>Only the sender should close.</li>
+            <li>Never send on a closed channel — panic.</li>
+          </ul>
+        `,
+        notes: "Common bug: close from multiple workers."
+      },
+      {
+        html: `
+          <div class="kicker">select</div>
+          <h2>Wait on several channel ops</h2>
+          <pre>select {
+case v := &lt;-a:
+    fmt.Println("a", v)
+case b &lt;- 1:
+    fmt.Println("sent b")
+case &lt;-time.After(time.Second):
+    fmt.Println("timeout")
+}</pre>
+          <ul class="small">
+            <li>One ready case runs; if several ready, pick at random.</li>
+            <li>Default makes it non-blocking — use sparingly.</li>
+          </ul>
+        `,
+        notes: "One timeout example is enough."
+      },
+      {
+        html: `
+          <div class="kicker">Pipeline</div>
+          <h2>Stage → stage → stage</h2>
+          <pre>nums := gen(1,2,3)
+sq := square(nums)
+for v := range sq { fmt.Println(v) }</pre>
+          <ul class="small">
+            <li>Each stage: goroutine(s) + channel(s).</li>
+            <li>Backpressure falls out of unbuffered/limited buffers.</li>
+            <li>Worker pool is a special pipeline: many workers, one job queue.</li>
+          </ul>
+        `,
+        notes: "Sketch boxes on board."
+      },
+      {
+        html: `
+          <div class="kicker">Worker pool</div>
+          <h2>The pattern to keep forever</h2>
+          <pre>jobs := make(chan Job)
+results := make(chan Result)
+for w := 0; w &lt; N; w++ { go worker(jobs, results) }
+// send jobs, close(jobs), collect results</pre>
+          <ul class="small">
+            <li>Fixed N — no <code>go</code> per student/row.</li>
+            <li><code>WaitGroup</code>: wait until workers exit after <code>jobs</code> closed.</li>
+          </ul>
+        `,
+        notes: "Core slide. Lab builds this."
+      },
+      {
+        html: `
+          <div class="kicker">WaitGroup · preview</div>
+          <h2>Glue for “when are workers done?”</h2>
+          <pre>var wg sync.WaitGroup
+wg.Add(N)
+for i := 0; i &lt; N; i++ {
+    go func() { defer wg.Done(); worker(...) }()
+}
+wg.Wait()
+close(results) // only after workers finished sending</pre>
+          <ul class="small">
+            <li>Deep mutex/race week 12 — today WaitGroup is the join.</li>
+          </ul>
+        `,
+        notes: "Common bug: close results too early."
+      },
+      {
+        html: `
+          <div class="kicker">SMS stretch</div>
+          <h2><code>POST /api/students/import</code></h2>
+          <pre>// body: [ {first_name, email, course, ...}, ... ]
+// pool of N workers validate + insert
+// response: { "created": 3, "failed": 1, "errors": [...] }</pre>
+          <ul class="small">
+            <li>Still in-memory store. Still no Postgres.</li>
+            <li>Struggling room: kata only; sketch this API on the board.</li>
+          </ul>
+        `,
+        notes: "Homework: import OR documented kata."
+      },
+      {
+        html: `
+          <div class="kicker">Kata options</div>
+          <h2>If import is too much today</h2>
+          <ul class="small">
+            <li><strong>Hash list:</strong> jobs are strings; workers compute SHA-256; collect digests.</li>
+            <li><strong>Resizer sketch:</strong> jobs are image paths (mock); workers “process”; count OK/fail.</li>
+            <li>Same pool shape as import — swap the job type.</li>
+          </ul>
+        `,
+        notes: "Starter ships hash-list pool."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo</div>
+          <div class="kicker">Channel basics</div>
+          <h2>Send, receive, close, range</h2>
+          <pre>ch := make(chan string, 2)
+ch &lt;- "a"; ch &lt;- "b"; close(ch)
+for s := range ch { fmt.Println(s) }</pre>
+        `,
+        notes: "Two minutes. Then pool."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo</div>
+          <div class="kicker">Worker pool</div>
+          <h2>N workers · job channel · results</h2>
+          <pre>// starter/worker-lab
+go test ./pool/
+// or go run . — hash a list with 4 workers</pre>
+        `,
+        notes: "Type or walk the starter pool."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo · stretch</div>
+          <div class="kicker">Import</div>
+          <h2>Wire pool behind Gin</h2>
+          <pre>r.POST("/api/students/import", students.Import)
+// bind []CreateStudentRequest → jobs → {created, failed}</pre>
+        `,
+        notes: "Skip if kata needs the hour."
+      },
+      {
+        html: `
+          <div class="kicker">Pitfalls</div>
+          <h2>Channel bugs that panic or hang</h2>
+          <ul class="small">
+            <li>Send on closed channel → panic.</li>
+            <li>Forget to close → <code>range</code> hangs forever.</li>
+            <li>Close from multiple goroutines → panic.</li>
+            <li>Unbounded <code>go</code> per job → you’re not using a pool.</li>
+          </ul>
+        `,
+        notes: "Quiz aloud."
+      },
+      {
+        html: `
+          <div class="kicker">Lab · rest of class</div>
+          <h2>Done when all of this is true</h2>
+          <ul class="small">
+            <li>Can explain unbuffered vs buffered</li>
+            <li>Worker pool kata runs (hash list or equivalent)</li>
+            <li>WaitGroup used to join workers before closing results</li>
+            <li>No naked <code>go</code> per job in the solution</li>
+            <li>Optional: import endpoint sketched or started</li>
+          </ul>
+        `,
+        notes: "Gate on board."
+      },
+      {
+        html: `
+          <div class="kicker">Homework</div>
+          <h2>Import <em>or</em> documented kata</h2>
+          <ul class="small">
+            <li><strong>A:</strong> <code>POST /api/students/import</code> with pool → <code>{created, failed}</code>.</li>
+            <li><strong>B:</strong> Documented worker pool under <code>internal/workers/</code> (delete before production if unused).</li>
+            <li>PR explains N workers and who closes which channel.</li>
+          </ul>
+        `,
+        notes: "Either path is fine."
+      },
+      {
+        html: `
+          <div class="kicker">Next session</div>
+          <h2>Week 12 — mutex, WaitGroup, context, races</h2>
+          <ul class="small">
+            <li>Fix the week-10 race for real.</li>
+            <li>Request-scoped <code>context</code> on handlers.</li>
+            <li>Bring a working pool mental model.</li>
+          </ul>
+        `,
+        notes: "Teaser only."
+      },
+      {
+        html: `
+          <div class="kicker">Words to keep</div>
+          <h2>Say these correctly next week</h2>
+          <div class="grid">
+            <div class="card"><h3>Channel</h3><p>Typed pipe; send/receive synchronization.</p></div>
+            <div class="card"><h3>select</h3><p>Wait on multiple channel cases.</p></div>
+            <div class="card"><h3>Pipeline</h3><p>Stages connected by channels.</p></div>
+            <div class="card"><h3>Worker pool</h3><p>Fixed N workers pulling from a job queue.</p></div>
+          </div>
+        `,
+        notes: "Oral quiz."
+      },
+      {
+        html: `
+          <div class="kicker">Layout reminder</div>
+          <h2>Where lab code lives</h2>
+          <pre>docs/week-11-day-01/starter/
+  worker-lab/                 # hash-list worker pool kata
+  backend/
+    internal/workers/         # homework option B
+    internal/handlers/        # Import stretch</pre>
+        `,
+        notes: "Kata first."
+      },
+      {
+        html: `
+          <div class="kicker">Honest limits</div>
+          <h2>What this week is not</h2>
+          <ul class="small">
+            <li>Not mutex / race fix (week 12).</li>
+            <li>Not Postgres bulk insert.</li>
+            <li>Not unbounded fan-out disguised as a pool.</li>
+            <li>Not every handler needs channels.</li>
+          </ul>
+        `,
+        notes: "Keep spiral honest."
+      },
+      {
+        html: `
+          <div class="kicker">Safety</div>
+          <h2>Still true</h2>
+          <ul class="small">
+            <li>Cap N and job list size in demos.</li>
+            <li>No secrets in import fixtures — use example.com.</li>
+            <li><code>gofmt</code>; no binaries in git.</li>
+          </ul>
+        `,
+        notes: "Quick."
+      },
+      {
+        html: `
+          <div class="kicker">Review bar</div>
+          <h2>Instructor merges when</h2>
+          <ul class="small">
+            <li>Pool uses fixed N + job channel (not go-per-item)</li>
+            <li>Channels closed by the right owner</li>
+            <li>PR explains created/failed or kata results</li>
+            <li>Create/list still sync and green</li>
+          </ul>
+        `,
+        notes: "Collect PRs."
+      },
+      {
+        titleSlide: true,
+        cls: "center",
+        html: `
+          <h1>Questions</h1>
+        `,
+        notes: "Then channel basics → worker pool lab."
+      }
+    ];
+
+
+    const root = document.getElementById("slides");
+    const notesEl = document.getElementById("notes");
+    const help = document.getElementById("help");
+    let i = 0;
+    let notesOn = false;
+
+    slides.forEach((s, idx) => {
+      const el = document.createElement("section");
+      el.className = "slide" + (s.titleSlide ? " title-slide" : "") + (s.cls ? " " + s.cls : "");
+      el.innerHTML = `
+        <header class="brand-header">
+          <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+          <div class="session">Week 11 · Day 1</div>
+        </header>
+        ` + s.html + `
+        <div class="foot">
+          <span class="org">Epic Learn Institute of Higher Education - Go Programming Master Course</span>
+          <span>${idx + 1} / ${slides.length}</span>
+        </div>
+        <div class="bar"><span></span></div>`;
+      root.appendChild(el);
+    });
+
+    function show(n) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      [...root.children].forEach((el, idx) => {
+        el.classList.toggle("on", idx === i);
+        el.querySelector(".bar > span").style.width = ((i + 1) / slides.length * 100) + "%";
+      });
+      notesEl.textContent = "Note: " + slides[i].notes;
+      location.hash = String(i + 1);
+    }
+
+    function parseHash() {
+      const n = parseInt(location.hash.replace("#", ""), 10);
+      show(Number.isFinite(n) ? n - 1 : 0);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); show(i + 1); }
+      if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); show(i - 1); }
+      if (e.key === "Home") show(0);
+      if (e.key === "End") show(slides.length - 1);
+      if (e.key === "n" || e.key === "N") { notesOn = !notesOn; notesEl.classList.toggle("on", notesOn); }
+      if (e.key === "?" || e.key === "h") help.classList.toggle("on");
+      if (e.key === "f" || e.key === "F") {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+      }
+      if (e.key === "p" || e.key === "P") window.print();
+    });
+
+    document.getElementById("slides").addEventListener("click", (e) => {
+      if (e.clientX > innerWidth * 0.6) show(i + 1);
+      else if (e.clientX < innerWidth * 0.4) show(i - 1);
+    });
+
+    window.addEventListener("hashchange", parseHash);
+    parseHash();
+  </script>
+</body>
+</html>
