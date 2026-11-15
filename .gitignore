@@ -41,6 +41,9 @@ docs/week-09-day-01/.pdf-html/
 docs/week-10-day-01/.pdf-html/
 docs/week-11-day-01/.pdf-html/
 docs/week-12-day-01/.pdf-html/
+docs/week-13-day-01/.pdf-html/
 .venv-docs/
 __pycache__/
 *.pyc
+cover.out
+*.coverprofile
