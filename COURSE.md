@@ -467,6 +467,10 @@ If the group is struggling, do the worker pool as a **kata** (thumbnail resizer 
 
 ### Week 14 — PostgreSQL, SQL, CRUD, transactions, migrations
 
+**Day 1 materials (full kit):** [docs/week-14-day-01/](docs/week-14-day-01/) — slides, presenter notes, presentation guide, student handout, lab sheet, troubleshooting, homework. **Printable PDFs + editable PPTX:** [docs/week-14-day-01/pdf/](docs/week-14-day-01/pdf/)
+
+**Day 1 slides:** [docs/slides/week-14-day-01.html](docs/slides/week-14-day-01.html) · [presenter notes](docs/slides/week-14-day-01-notes.md)
+
 **SE / data**
 
 - What a relational DB is; SQL: `SELECT` `INSERT` `UPDATE` `DELETE`
