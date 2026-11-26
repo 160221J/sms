@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Week 14 · Day 1 — Go Programming Master Course · Epic Learn</title>
+  <style>
+    :root {
+      --ink: #14202b;
+      --muted: #4d5d6b;
+      --paper: #f4efe6;
+      --card: #fffdf9;
+      --line: #d8cfc2;
+      --teal: #0b6e68;
+      --teal-dark: #084f4b;
+      --rust: #c24e1d;
+      --gold: #c9a227;
+      --code: #10212c;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #0e181f;
+      color: var(--ink);
+      font-family: "Segoe UI", "Calibri", "Liberation Sans", system-ui, sans-serif;
+    }
+    .deck {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .slides {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 96px 72px 88px;
+      background:
+        radial-gradient(900px 420px at 100% -10%, rgba(11, 110, 104, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--paper), #efe7d9);
+    }
+    .slide.on { display: flex; flex-direction: column; }
+    .slide.title-slide {
+      justify-content: flex-end;
+      background:
+        linear-gradient(180deg, rgba(8, 31, 36, 0.15), rgba(8, 31, 36, 0.55)),
+        linear-gradient(135deg, #0b6e68 0%, #14202b 55%, #c24e1d 140%);
+      color: #f7f1e6;
+    }
+    .kicker {
+      font-size: 15px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .title-slide .kicker { color: #ead9a3; }
+    h1 {
+      font-size: 54px;
+      line-height: 1.08;
+      margin: 0 0 16px;
+      letter-spacing: -0.03em;
+      max-width: 16ch;
+    }
+    h2 {
+      font-size: 40px;
+      line-height: 1.15;
+      margin: 0 0 28px;
+      letter-spacing: -0.03em;
+    }
+    .lede {
+      font-size: 26px;
+      line-height: 1.35;
+      color: var(--muted);
+      max-width: 32em;
+      margin: 0 0 28px;
+    }
+    .title-slide .lede { color: #e7ddd0; max-width: 22em; }
+    .meta { font-size: 18px; color: #d7cbb8; margin-top: 28px; }
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 28px;
+      line-height: 1.35;
+    }
+    ul li {
+      position: relative;
+      padding: 10px 0 10px 36px;
+    }
+    ul li::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--teal);
+      position: absolute;
+      left: 0;
+      top: 1.05em;
+    }
+    ul.small { font-size: 22px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 22px 24px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: var(--teal-dark);
+    }
+    .card p, .card li { font-size: 20px; line-height: 1.4; margin: 0; color: var(--ink); }
+    .card ul li { padding-left: 24px; font-size: 20px; }
+    .card ul li::before { width: 8px; height: 8px; top: 0.85em; background: var(--rust); }
+    pre {
+      margin: 0;
+      background: var(--code);
+      color: #e8f2ef;
+      border-radius: 16px;
+      padding: 22px 26px;
+      font-size: 20px;
+      line-height: 1.45;
+      overflow: auto;
+      font-family: "Cascadia Code", "Consolas", "Liberation Mono", monospace;
+    }
+    .tag {
+      display: inline-block;
+      background: var(--teal);
+      color: white;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .demo .tag { background: var(--rust); }
+    .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; align-items: start; }
+    .brand-header {
+      position: absolute;
+      top: 18px;
+      left: 56px;
+      right: 56px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2;
+    }
+    .brand-header img {
+      height: 56px;
+      width: auto;
+      display: block;
+      background: #fff;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .brand-header .session {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+    }
+    .title-slide .brand-header .session { color: #ead9a3; }
+    .foot {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    .foot .org {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .title-slide .foot {
+      color: #d8cbb8;
+      border-top-color: rgba(255,255,255,0.25);
+    }
+    .bar {
+      height: 6px;
+      background: #d5cdc0;
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+    }
+    .bar > span {
+      display: block;
+      height: 100%;
+      background: var(--teal);
+      width: 0%;
+    }
+    .notes {
+      display: none;
+      background: #10212c;
+      color: #e8f2ef;
+      padding: 12px 72px;
+      font-size: 15px;
+      line-height: 1.4;
+      max-height: 28vh;
+      overflow: auto;
+    }
+    .notes.on { display: block; }
+    .help {
+      display: none;
+      position: absolute;
+      right: 28px;
+      top: 28px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 14px;
+      z-index: 5;
+    }
+    .help.on { display: block; }
+    strong { color: var(--teal-dark); }
+    .title-slide strong { color: #fff; }
+    .big { font-size: 34px; line-height: 1.35; max-width: 22em; margin: 0; }
+    .center {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .title-slide.center {
+      justify-content: center;
+    }
+    .title-slide.center h1 {
+      max-width: none;
+      font-size: 88px;
+    }
+    @page { size: 13.333in 7.5in; margin: 0; }
+    @media print {
+      html, body, .deck, .slides {
+        height: auto !important;
+        overflow: visible !important;
+        background: white !important;
+      }
+      .notes, .help, .bar, .brand-header, .foot { display: none !important; }
+      .slide {
+        display: flex !important;
+        position: relative !important;
+        inset: auto !important;
+        height: 7.5in;
+        width: 13.333in;
+        padding: 78px 64px 48px;
+        page-break-after: always;
+        break-after: page;
+        overflow: hidden;
+      }
+      .slide:last-child { page-break-after: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <div class="slides" id="slides"></div>
+    <div class="notes" id="notes"></div>
+  </div>
+  <div class="help" id="help">
+    ← → space · F fullscreen · N notes · P print/PDF · ? help
+  </div>
+  <script>
+    const slides = [
+      {
+        titleSlide: true,
+        html: `
+          <div class="kicker">Go Programming Master Course</div>
+          <h1>Week 14, Day 1</h1>
+          <p class="lede">PostgreSQL, SQL, CRUD, transactions, migrations — the map leaves memory.</p>
+          <p class="meta">Umesh Indrajith · BSc Eng (Hons), University of Moratuwa<br>Senior Software Engineer / Lecturer</p>
+        `,
+        notes: "Replace in-memory student store with Postgres via pgx. Injection demo is mandatory."
+      },
+      {
+        html: `
+          <div class="kicker">Since last week</div>
+          <h2>Green tests. Now persist for real.</h2>
+          <ul class="small">
+            <li>Table-driven tests, httptest, fakes, CI habit.</li>
+            <li>In-memory map was a teaching scaffold — today it becomes optional/fake-only.</li>
+            <li><code>context.Context</code> on repos finally matters for DB calls.</li>
+          </ul>
+        `,
+        notes: "Confirm Postgres installed or Docker ready."
+      },
+      {
+        html: `
+          <div class="kicker">Today</div>
+          <h2>If Day 1 of week 14 works, you can</h2>
+          <ul class="small">
+            <li>Explain relational tables vs an in-memory map.</li>
+            <li>Run <code>SELECT/INSERT/UPDATE/DELETE</code> in <code>psql</code>.</li>
+            <li>Connect with <strong>pgx</strong> pool from Go.</li>
+            <li>Use only parameterized queries (<code>$1</code>, <code>$2</code>).</li>
+            <li>Apply a SQL migration file (not a GUI click).</li>
+            <li>Hit <code>GET /api/students</code> and see rows from Postgres.</li>
+          </ul>
+        `,
+        notes: "Lab: createdb → migrate → GetAll from Postman."
+      },
+      {
+        html: `
+          <div class="kicker">Software engineering</div>
+          <h2>The database is the source of truth</h2>
+          <p class="lede">App restarts must not erase students. SQL is the API to that truth. Never concatenate user input into SQL.</p>
+          <ul class="small">
+            <li>Driver in this course: <code>pgx</code> (<code>internal/database</code>).</li>
+            <li>Homework: prefer users table + persist register (or keep users in memory one more week if JWT is next).</li>
+          </ul>
+        `,
+        notes: "Prefer users in DB if register already exists."
+      },
+      {
+        html: `
+          <div class="kicker">Relational DB</div>
+          <h2>Tables, rows, keys</h2>
+          <ul class="small">
+            <li>Table ≈ typed collection; row ≈ one student/user.</li>
+            <li><code>SERIAL</code> / identity for ids; <code>UNIQUE</code> on email/username.</li>
+            <li>Foreign keys later — this week: students (+ users in migration).</li>
+          </ul>
+        `,
+        notes: "Keep ERD minimal."
+      },
+      {
+        html: `
+          <div class="kicker">SQL</div>
+          <h2>Four verbs you will live with</h2>
+          <pre>SELECT id, first_name FROM students ORDER BY id;
+INSERT INTO students (first_name, ...) VALUES ($1, ...);
+UPDATE students SET course = $1 WHERE id = $2;
+DELETE FROM students WHERE id = $1;</pre>
+        `,
+        notes: "Live in psql briefly."
+      },
+      {
+        html: `
+          <div class="kicker">Install</div>
+          <h2>PostgreSQL on Ubuntu + <code>psql</code></h2>
+          <pre>sudo apt install postgresql postgresql-contrib
+sudo -u postgres createdb sms
+psql -U postgres -d sms</pre>
+          <ul class="small">
+            <li>Or Docker: <code>docker run ... -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres</code></li>
+            <li>Match <code>.env</code>: host, port, user, password, db name.</li>
+          </ul>
+        `,
+        notes: "Room may mix apt vs Docker — both OK."
+      },
+      {
+        html: `
+          <div class="kicker">Migrations</div>
+          <h2>Schema as SQL files — not a GUI click</h2>
+          <pre>psql -U postgres -d sms -f migrations/001_init.sql</pre>
+          <ul class="small">
+            <li>Versioned, reviewable, same on every laptop.</li>
+            <li>Starter schema: <code>users</code> + <code>students</code> (see course migration).</li>
+          </ul>
+        `,
+        notes: "Open 001_init.sql on projector."
+      },
+      {
+        html: `
+          <div class="kicker">pgx</div>
+          <h2>Pool in <code>internal/database</code></h2>
+          <pre>pool, err := pgxpool.New(ctx, dsn)
+err = pool.Ping(ctx)
+// Exec / Query / QueryRow with $1, $2</pre>
+          <ul class="small">
+            <li>Pass <code>c.Request.Context()</code> into repository methods (week 12 payoff).</li>
+          </ul>
+        `,
+        notes: "Show Connect + Ping."
+      },
+      {
+        html: `
+          <div class="kicker">Danger</div>
+          <h2>SQL injection — concat, then the fix</h2>
+          <pre>// BAD
+q := "SELECT * FROM students WHERE email = '" + email + "'"
+// GOOD
+q := "SELECT * FROM students WHERE email = $1"
+row := pool.QueryRow(ctx, q, email)</pre>
+          <ul class="small">
+            <li>Live demo in <code>sql-lab</code>: malicious input changes the query.</li>
+          </ul>
+        `,
+        notes: "Mandatory demo. Do not skip."
+      },
+      {
+        html: `
+          <div class="kicker">Repository</div>
+          <h2>Replace the map with SQL</h2>
+          <pre>func (r *StudentRepository) GetAll(ctx context.Context) ([]Student, error) {
+    rows, err := r.pool.Query(ctx, query) // SELECT ... FROM students
+    ...
+}</pre>
+          <ul class="small">
+            <li>Keep the <code>StudentStore</code> interface — fake still for unit tests; pgx for real.</li>
+          </ul>
+        `,
+        notes: "Interface from week 13 still earns its keep."
+      },
+      {
+        html: `
+          <div class="kicker">Transactions</div>
+          <h2>All succeed or all roll back</h2>
+          <pre>tx, err := pool.Begin(ctx)
+defer tx.Rollback(ctx) // no-op after Commit
+// Exec A, Exec B
+return tx.Commit(ctx)</pre>
+          <ul class="small">
+            <li>Sketch: create student + audit row (or register user pieces).</li>
+            <li>Deep audit tables can wait — pattern matters today.</li>
+          </ul>
+        `,
+        notes: "One Begin/Commit live is enough."
+      },
+      {
+        html: `
+          <div class="kicker">SMS milestone</div>
+          <h2>Postman hits Postgres</h2>
+          <ul class="small">
+            <li><code>createdb sms</code> → apply <code>001_init.sql</code></li>
+            <li>Wire <code>database.Connect</code> in <code>main</code></li>
+            <li><code>POST /api/students</code> inserts a row</li>
+            <li><code>GET /api/students</code> lists from Postgres (survives restart)</li>
+          </ul>
+        `,
+        notes: "Restart server to prove persistence."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo</div>
+          <div class="kicker">psql</div>
+          <h2>Create DB, apply migration, SELECT</h2>
+          <pre>createdb sms
+psql -d sms -f migrations/001_init.sql
+psql -d sms -c '\\dt'</pre>
+        `,
+        notes: "Projector must show tables."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo</div>
+          <div class="kicker">Injection</div>
+          <h2>Concat breaks · <code>$1</code> holds</h2>
+          <pre>cd starter/sql-lab
+go test -v ./inject/</pre>
+        `,
+        notes: "Show the malicious string in the BAD query."
+      },
+      {
+        cls: "demo",
+        html: `
+          <div class="tag">Live demo</div>
+          <div class="kicker">API + DB</div>
+          <h2>Create → List survives restart</h2>
+          <pre>go run ./cmd/server
+curl -X POST .../api/students -d '{...}'
+curl .../api/students
+# restart server — rows still there</pre>
+        `,
+        notes: "Contrast with week-8 memory wipe."
+      },
+      {
+        html: `
+          <div class="kicker">Pitfalls</div>
+          <h2>Common week-14 bugs</h2>
+          <ul class="small">
+            <li>Wrong DB name / password in <code>.env</code>.</li>
+            <li>Forgot to run migration → relation does not exist.</li>
+            <li>String-concat SQL “just for a demo leftover” in Create.</li>
+            <li><code>context.Background()</code> everywhere — prefer request context.</li>
+            <li>Scanning NULL dates into non-pointer <code>time.Time</code>.</li>
+          </ul>
+        `,
+        notes: "Quiz aloud."
+      },
+      {
+        html: `
+          <div class="kicker">Lab · rest of class</div>
+          <h2>Done when all of this is true</h2>
+          <ul class="small">
+            <li>Postgres up; <code>sms</code> DB exists</li>
+            <li>Migration applied; <code>\\dt</code> shows students</li>
+            <li>Injection lab understood (BAD vs GOOD)</li>
+            <li>Create + List via API hit Postgres</li>
+            <li>Optional: transaction sketch / users persist</li>
+          </ul>
+        `,
+        notes: "Gate on board."
+      },
+      {
+        html: `
+          <div class="kicker">Homework</div>
+          <h2>Users in DB (preferred) or note the defer</h2>
+          <ul class="small">
+            <li>Prefer: persist <code>/api/register</code> into <code>users</code> table.</li>
+            <li>Or: keep users in memory one more week if JWT (week 15) is the focus — document why.</li>
+            <li>PR: migration applied steps + parameterized queries only.</li>
+          </ul>
+        `,
+        notes: "Prefer DB users."
+      },
+      {
+        html: `
+          <div class="kicker">Next session</div>
+          <h2>Week 15 — Auth, frontend wiring</h2>
+          <ul class="small">
+            <li>JWT + Bearer middleware; protect student routes.</li>
+            <li>CORS + React app against their API.</li>
+            <li>Bring a working Postgres-backed List/Create.</li>
+          </ul>
+        `,
+        notes: "Teaser."
+      },
+      {
+        html: `
+          <div class="kicker">Words to keep</div>
+          <h2>Say these correctly next week</h2>
+          <div class="grid">
+            <div class="card"><h3>Migration</h3><p>Versioned SQL that defines schema.</p></div>
+            <div class="card"><h3>Parameterized</h3><p>$1 placeholders — never concat input.</p></div>
+            <div class="card"><h3>pgx pool</h3><p>Shared connections to Postgres.</p></div>
+            <div class="card"><h3>Transaction</h3><p>Commit all or roll back all.</p></div>
+          </div>
+        `,
+        notes: "Oral quiz."
+      },
+      {
+        html: `
+          <div class="kicker">Layout reminder</div>
+          <h2>Where lab code lives</h2>
+          <pre>docs/week-14-day-01/starter/
+  sql-lab/                    # injection BAD vs GOOD
+  backend/
+    migrations/001_init.sql
+    internal/database/        # pgx pool
+    internal/repository/      # SQL StudentRepository
+    .env.example</pre>
+        `,
+        notes: "Migration first."
+      },
+      {
+        html: `
+          <div class="kicker">Honest limits</div>
+          <h2>What this week is not</h2>
+          <ul class="small">
+            <li>Not JWT / frontend wiring (week 15).</li>
+            <li>Not ORMs — raw SQL with pgx.</li>
+            <li>Not every isolation level.</li>
+            <li>Not production connection-pool tuning.</li>
+          </ul>
+        `,
+        notes: "Keep spiral honest."
+      },
+      {
+        html: `
+          <div class="kicker">Safety</div>
+          <h2>Still true</h2>
+          <ul class="small">
+            <li>No real passwords in git — <code>.env</code> is local.</li>
+            <li>Parameterized queries only after the injection demo.</li>
+            <li><code>gofmt</code>; no binaries in git.</li>
+          </ul>
+        `,
+        notes: "Quick."
+      },
+      {
+        html: `
+          <div class="kicker">Review bar</div>
+          <h2>Instructor merges when</h2>
+          <ul class="small">
+            <li>Migration file present and documented</li>
+            <li>Students CRUD uses pgx + <code>$n</code> placeholders</li>
+            <li>List survives process restart</li>
+            <li>No string-concat SQL in production paths</li>
+          </ul>
+        `,
+        notes: "Collect PRs."
+      },
+      {
+        titleSlide: true,
+        cls: "center",
+        html: `
+          <h1>Questions</h1>
+        `,
+        notes: "Then createdb → migrate → injection → API."
+      }
+    ];
+
+
+    const root = document.getElementById("slides");
+    const notesEl = document.getElementById("notes");
+    const help = document.getElementById("help");
+    let i = 0;
+    let notesOn = false;
+
+    slides.forEach((s, idx) => {
+      const el = document.createElement("section");
+      el.className = "slide" + (s.titleSlide ? " title-slide" : "") + (s.cls ? " " + s.cls : "");
+      el.innerHTML = `
+        <header class="brand-header">
+          <img src="../branding/epic-learn-logo.png" alt="Epic Learn Education">
+          <div class="session">Week 14 · Day 1</div>
+        </header>
+        ` + s.html + `
+        <div class="foot">
+          <span class="org">Epic Learn Institute of Higher Education - Go Programming Master Course</span>
+          <span>${idx + 1} / ${slides.length}</span>
+        </div>
+        <div class="bar"><span></span></div>`;
+      root.appendChild(el);
+    });
+
+    function show(n) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      [...root.children].forEach((el, idx) => {
+        el.classList.toggle("on", idx === i);
+        el.querySelector(".bar > span").style.width = ((i + 1) / slides.length * 100) + "%";
+      });
+      notesEl.textContent = "Note: " + slides[i].notes;
+      location.hash = String(i + 1);
+    }
+
+    function parseHash() {
+      const n = parseInt(location.hash.replace("#", ""), 10);
+      show(Number.isFinite(n) ? n - 1 : 0);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); show(i + 1); }
+      if (["ArrowLeft", "ArrowUp", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); show(i - 1); }
+      if (e.key === "Home") show(0);
+      if (e.key === "End") show(slides.length - 1);
+      if (e.key === "n" || e.key === "N") { notesOn = !notesOn; notesEl.classList.toggle("on", notesOn); }
+      if (e.key === "?" || e.key === "h") help.classList.toggle("on");
+      if (e.key === "f" || e.key === "F") {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+      }
+      if (e.key === "p" || e.key === "P") window.print();
+    });
+
+    document.getElementById("slides").addEventListener("click", (e) => {
+      if (e.clientX > innerWidth * 0.6) show(i + 1);
+      else if (e.clientX < innerWidth * 0.4) show(i - 1);
+    });
+
+    window.addEventListener("hashchange", parseHash);
+    parseHash();
+  </script>
+</body>
+</html>
