@@ -2,7 +2,7 @@
 
 Open the `.html` file in a browser. **F** fullscreen, arrows to move, **N** speaker notes, **P** print to PDF.
 
-Each session also has a full teaching kit (handout, lab sheet, homework): [../week-01-day-01/](../week-01-day-01/) · [../week-02-day-01/](../week-02-day-01/) · [../week-03-day-01/](../week-03-day-01/) · [../week-04-day-01/](../week-04-day-01/) · [../week-05-day-01/](../week-05-day-01/) · [../week-06-day-01/](../week-06-day-01/) · [../week-07-day-01/](../week-07-day-01/) · [../week-08-day-01/](../week-08-day-01/) · [../week-09-day-01/](../week-09-day-01/) · [../week-10-day-01/](../week-10-day-01/) · [../week-11-day-01/](../week-11-day-01/) · [../week-12-day-01/](../week-12-day-01/) · [../week-13-day-01/](../week-13-day-01/) · [../week-14-day-01/](../week-14-day-01/) · [../week-15-day-01/](../week-15-day-01/).
+Each session also has a full teaching kit (handout, lab sheet, homework): [../week-01-day-01/](../week-01-day-01/) · [../week-02-day-01/](../week-02-day-01/) · [../week-03-day-01/](../week-03-day-01/) · [../week-04-day-01/](../week-04-day-01/) · [../week-05-day-01/](../week-05-day-01/) · [../week-06-day-01/](../week-06-day-01/) · [../week-07-day-01/](../week-07-day-01/) · [../week-08-day-01/](../week-08-day-01/) · [../week-09-day-01/](../week-09-day-01/) · [../week-10-day-01/](../week-10-day-01/) · [../week-11-day-01/](../week-11-day-01/) · [../week-12-day-01/](../week-12-day-01/) · [../week-13-day-01/](../week-13-day-01/) · [../week-14-day-01/](../week-14-day-01/) · [../week-15-day-01/](../week-15-day-01/) · [../week-16-day-01/](../week-16-day-01/).
 
 | Session | Deck | Presenter notes | PowerPoint |
 | --- | --- | --- | --- |
@@ -21,3 +21,4 @@ Each session also has a full teaching kit (handout, lab sheet, homework): [../we
 | Week 13, Day 1 | [week-13-day-01.html](week-13-day-01.html) | [week-13-day-01-notes.md](week-13-day-01-notes.md) | [slides.pptx](../week-13-day-01/pdf/week-13-day-01-slides.pptx) |
 | Week 14, Day 1 | [week-14-day-01.html](week-14-day-01.html) | [week-14-day-01-notes.md](week-14-day-01-notes.md) | [slides.pptx](../week-14-day-01/pdf/week-14-day-01-slides.pptx) |
 | Week 15, Day 1 | [week-15-day-01.html](week-15-day-01.html) | [week-15-day-01-notes.md](week-15-day-01-notes.md) | [slides.pptx](../week-15-day-01/pdf/week-15-day-01-slides.pptx) |
+| Week 16, Day 1 | [week-16-day-01.html](week-16-day-01.html) | [week-16-day-01-notes.md](week-16-day-01-notes.md) | [slides.pptx](../week-16-day-01/pdf/week-16-day-01-slides.pptx) |
