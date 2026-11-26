@@ -20,85 +20,168 @@
 
 ## Slide 1 — Title
 
-**Say:** Week 13 gave you tests and fakes. Today students **survive a restart** because they live in PostgreSQL.
+**On screen:** Week 14, Day 1 — PostgreSQL, SQL, CRUD, transactions, migrations.
 
-**Do:** Confirm who has Postgres (apt vs Docker) before coding.
+**Say:** Week 13 gave you tests and fakes. Today students **survive a restart** because they live in PostgreSQL — not in a Go map.
+
+**Do:** Don’t open JWT/frontend talk. Confirm who has Postgres (apt vs Docker) before coding.
 
 ---
 
 ## Slide 2 — Since last week
 
-Green tests stay. In-memory map becomes fake-only. `context.Context` on repos finally drives DB cancel/timeouts.
+**On screen:** Green tests. Now persist for real.
+
+**Explain:**
+- Table-driven tests, httptest, fakes, CI habit stay.
+- The in-memory map was a scaffold — today it becomes **fake-only** for unit tests.
+- Week-12 `context.Context` on repos finally matters: every query takes the request context.
+
+**Ask:** “Who can create a student, restart the server, and still see it?” — nobody, until today.
 
 ---
 
 ## Slide 3 — Outcomes
 
-Contract: explain tables; run CRUD SQL in `psql`; connect with **pgx**; parameterized queries only; apply a migration file; `GET /api/students` reads Postgres.
+**On screen:** If Day 1 works, you can…
+
+**Contract with the class:**
+1. Explain relational tables vs an in-memory map.
+2. Run `SELECT` / `INSERT` / `UPDATE` / `DELETE` in `psql`.
+3. Connect with a **pgx** pool from Go.
+4. Use only parameterized queries (`$1`, `$2`).
+5. Apply a SQL **migration file** (not a GUI click).
+6. Hit `GET /api/students` and see rows from Postgres.
+
+**Gate later:** Create + List survive process restart.
 
 ---
 
-## Slide 4 — SE frame
+## Slide 4 — Software engineering frame
 
-DB is source of truth. SQL is the API. Never concat input into SQL. Driver: **pgx**. Homework prefers users table.
+**On screen:** The database is the source of truth.
+
+**Say:** App restarts must not erase students. SQL is the API to that truth. Never concatenate user input into SQL.
+
+**Course driver:** `pgx` (`internal/database`).  
+**Homework preview:** prefer `users` table + persist register (or document deferral to week 15).
 
 ---
 
 ## Slide 5 — Relational DB
 
-Tables/rows/keys. `SERIAL` ids. `UNIQUE` email/username. Migration includes `users` + `students`.
+**On screen:** Tables, rows, keys.
+
+**Explain simply:**
+- Table ≈ typed collection; row ≈ one student/user.
+- `SERIAL` (or identity) for ids; `UNIQUE` on email/username.
+- Foreign keys can wait — this week: `students` (+ `users` in the migration for homework).
+
+**Board:** one box for `students`, one for `users`.
 
 ---
 
 ## Slide 6 — SQL four verbs
 
-Live briefly in `psql`: SELECT / INSERT / UPDATE / DELETE. Emphasize `WHERE` with placeholders later.
+**On screen:** SELECT / INSERT / UPDATE / DELETE.
+
+**Do live in `psql` (2–3 minutes):** insert one row by hand, select it, update course, delete if you want.
+
+**Bridge:** Go will run the same verbs through pgx with `$1` placeholders.
 
 ---
 
 ## Slide 7 — Install
 
-Ubuntu packages or Docker. Align `.env` (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME=sms`).
+**On screen:** Ubuntu packages or Docker + `.env`.
+
+```bash
+sudo apt install postgresql postgresql-contrib
+sudo -u postgres createdb sms
+psql -U postgres -d sms
+```
+
+**Or Docker:** Postgres on `:5432` with a known password.  
+**Align** `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME=sms` in `.env`.
 
 ---
 
 ## Slide 8 — Migrations
 
-`psql -d sms -f migrations/001_init.sql`. Schema as reviewed SQL files — not GUI clicks. Open file on projector.
+**On screen:** Schema as SQL files — not a GUI click.
+
+```bash
+psql -U postgres -d sms -f migrations/001_init.sql
+```
+
+**Open `001_init.sql` on the projector.** Versioned, reviewable, same on every laptop. Tables: `users` + `students`.
 
 ---
 
 ## Slide 9 — pgx pool
 
-`pgxpool.New` → `Ping` → `Query`/`Exec`/`QueryRow` with `$1`. Pass request context into repo methods.
+**On screen:** `pgxpool.New` → `Ping` → `Query` / `Exec` / `QueryRow`.
+
+**Explain:**
+- Pool = shared connections (don’t open a new connection per request by hand).
+- Pass `c.Request.Context()` into repository methods (week 12 payoff).
+- Placeholders are `$1`, `$2` (Postgres style), not `?`.
 
 ---
 
 ## Slide 10 — SQL injection (mandatory)
 
-BAD: `"... '" + email + "'"`. GOOD: `WHERE email = $1` + separate arg. Live `sql-lab` shows the malicious string rewriting the query.
+**On screen:** BAD concat → GOOD `$1`.
+
+```go
+// BAD
+q := "SELECT * FROM students WHERE email = '" + email + "'"
+// GOOD
+q := "SELECT * FROM students WHERE email = $1"
+row := pool.QueryRow(ctx, q, email)
+```
+
+**Say:** Concat lets the user change the *shape* of the query. Placeholders keep input as data.
+
+**Live cue:** `sql-lab` next (slide 15). Do not skip this demo.
 
 ---
 
 ## Slide 11 — Repository
 
-Replace map with SQL. Keep `StudentStore` interface — fake for unit tests, pgx for real.
+**On screen:** Replace the map with SQL.
+
+**Explain:**
+- `StudentRepository` talks to Postgres with parameterized SQL.
+- Keep **`StudentStore` interface** from week 13 — fake for unit tests / CI without DB; pgx for real.
+- Handlers stay dumb: bind → call store → JSON.
 
 ---
 
 ## Slide 12 — Transactions
 
-`Begin` → work → `Commit`; `defer Rollback`. Sketch create + audit (audit table optional). Pattern > depth today.
+**On screen:** Begin → work → Commit; `defer Rollback`.
+
+**Explain:** All succeed or all roll back. Sketch: create student + audit row (audit table optional — pattern matters).
+
+**Depth limit:** one live Begin/Commit is enough; don’t teach every isolation level.
 
 ---
 
 ## Slide 13 — SMS milestone
 
-createdb → migrate → Connect in main → POST inserts → GET lists → **restart still has rows**.
+**On screen:** Postman hits Postgres.
+
+**Checklist:**
+1. `createdb sms` → apply `001_init.sql`
+2. Wire `database.Connect` in `main`
+3. `POST /api/students` inserts a row
+4. `GET /api/students` lists from Postgres
+5. **Restart the server** — rows still there
 
 ---
 
-## Slide 14 — Live: psql
+## Slide 14 — Live demo: psql
 
 ```bash
 createdb sms
@@ -106,81 +189,129 @@ psql -d sms -f migrations/001_init.sql
 psql -d sms -c '\dt'
 ```
 
+Projector must show `students` (and `users`) tables.
+
 ---
 
-## Slide 15 — Live: injection
+## Slide 15 — Live demo: injection
 
 ```bash
-cd starter/sql-lab && go test -v ./inject/
+cd docs/week-14-day-01/starter/sql-lab
+go test -v ./inject/
 ```
 
-Point at BAD query containing `OR '1'='1`.
+**Point at** the BAD query text containing `OR '1'='1`. Then show GOOD keeps `$1` and never splices the argument into the SQL string.
 
 ---
 
-## Slide 16 — Live: API + DB
+## Slide 16 — Live demo: API + DB
 
-POST create, GET list, restart server, GET again. Contrast week-8 memory wipe.
+```bash
+cd docs/week-14-day-01/starter/backend
+cp -n .env.example .env   # edit DB_* if needed
+go run ./cmd/server
+
+curl -s -X POST localhost:8080/api/students \
+  -H 'Content-Type: application/json' \
+  -d '{"first_name":"Ada","last_name":"Lovelace","email":"ada@example.com","course":"SE"}'
+curl -s localhost:8080/api/students
+# Ctrl+C, start again, GET again — rows remain
+```
+
+**Contrast:** week 8 memory wipe on restart.
 
 ---
 
 ## Slide 17 — Pitfalls
 
-Wrong `.env`; forgot migration; concat leftover; `Background` everywhere; NULL date scan into `time.Time`.
+**Quiz aloud:**
+
+| Bug | Fix |
+| --- | --- |
+| connection refused | Start Postgres; check `DB_PORT` |
+| relation "students" does not exist | Run migration |
+| password authentication failed | Fix `.env` |
+| Concat SQL “just for a demo leftover” | Delete it from Create |
+| NULL `date_of_birth` scan error | Pointer / `pgtype` / careful Scan |
 
 ---
 
 ## Slide 18 — Lab gate
 
-Postgres up; migration applied; injection understood; Create+List hit DB; optional tx/users.
+**On board:**
+- [ ] Postgres up; `sms` DB exists  
+- [ ] Migration applied; `\dt` shows students  
+- [ ] Injection BAD vs GOOD understood  
+- [ ] Create + List via API hit Postgres  
+- [ ] Optional: transaction sketch / users persist  
 
 ---
 
 ## Slide 19 — Homework
 
-Prefer persist register into `users`. Or document deferring users to week 15. PR: migrate steps + parameterized only.
+**Prefer A:** Persist `/api/register` into `users` (table already in migration). Parameterized inserts; never log passwords.
+
+**B (only if JWT is the week-15 focus):** Keep users in memory one more week — PR must say why; students already on Postgres.
+
+PR includes migrate steps + “parameterized only.”
 
 ---
 
-## Slide 20 — Next: Week 15 auth + frontend
+## Slide 20 — Next session
 
-JWT, Bearer, CORS, React. Need Postgres List/Create working.
-
----
-
-## Slide 21 — Words
-
-Migration · Parameterized · pgx pool · Transaction.
+Week 15 — JWT, Bearer middleware, CORS, React app. Bring a working Postgres List/Create.
 
 ---
 
-## Slide 22 — Layout
+## Slide 21 — Words to keep
 
-`sql-lab/` · `backend/migrations/` · `internal/database/` · `internal/repository/` · `.env.example`
+**Cold-call:**
+1. Migration? → versioned SQL that defines schema.  
+2. Parameterized? → `$1` placeholders; never concat input.  
+3. pgx pool? → shared connections to Postgres.  
+4. Transaction? → commit all or roll back all.
 
 ---
 
-## Slide 23 — Limits
+## Slide 22 — Layout reminder
 
-Not JWT/frontend. Not ORMs. Not isolation-level deep dive. Not pool tuning.
+```
+docs/week-14-day-01/starter/
+  sql-lab/                    # injection BAD vs GOOD
+  backend/
+    migrations/001_init.sql
+    internal/database/        # pgx pool
+    internal/repository/      # SQL StudentRepository + fake
+    .env.example
+```
+
+**Migration first**, then sql-lab, then API.
+
+---
+
+## Slide 23 — Honest limits
+
+Not JWT/frontend (15). Not ORMs. Not every isolation level. Not production pool tuning.
 
 ---
 
 ## Slide 24 — Safety
 
-No secrets in git. Parameterized after demo. gofmt; no binaries.
+No real passwords in git. Parameterized queries only after the injection demo. `gofmt`; no binaries in git.
 
 ---
 
 ## Slide 25 — Review bar
 
-Migration documented; CRUD uses `$n`; List survives restart; no concat SQL.
+Merge when: migration documented; students CRUD uses pgx + `$n`; List survives restart; no concat SQL in app paths.
+
+**Reject:** string-built queries in Create/List/Get.
 
 ---
 
 ## Slide 26 — Questions
 
-Close: “First actions: createdb, apply `001_init.sql`, run sql-lab, then Create/List.”
+**Close with:** “First actions: `createdb`, apply `001_init.sql`, run sql-lab, then Create/List and restart.”
 
 ---
 
@@ -194,17 +325,20 @@ cd docs/week-14-day-01/starter/sql-lab && go test -v ./inject/
 
 cd ../backend
 cp -n .env.example .env
-go test ./...
+go test ./...          # unit tests use Fake (no DB)
 go run ./cmd/server
 ```
 
-## Appendix — Q&A
+## Appendix — Anticipated questions
 
-**Q: Why keep the fake?**  
-A: Unit tests and CI without a live database. Integration still needs Postgres for the lab proof.
+**Q: Why keep the fake if we have Postgres?**  
+A: Unit tests and CI without a live database. The lab *proof* still needs Postgres for persistence.
 
 **Q: Why not GORM?**  
 A: Course teaches SQL + pgx first so injection and migrations stay visible.
+
+**Q: Users still in memory?**  
+A: Starter leaves register in-memory on purpose — homework prefers moving it to `users`.
 
 ---
 

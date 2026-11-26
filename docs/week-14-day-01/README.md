@@ -11,6 +11,7 @@
 | [student-handout.pdf](pdf/student-handout.pdf) | Students |
 | [lab-sheet.pdf](pdf/lab-sheet.pdf) | Lab gate |
 | [week-14-day-01-notes.pdf](pdf/week-14-day-01-notes.pdf) | Script |
+| [presentation-guide.pdf](pdf/presentation-guide.pdf) | Full presenter guide (all slides) |
 | [troubleshooting.pdf](pdf/troubleshooting.pdf) | Room walk |
 | [homework.pdf](pdf/homework.pdf) | Users in DB |
 | [pre-class.pdf](pdf/pre-class.pdf) | Send ahead |

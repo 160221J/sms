@@ -230,6 +230,7 @@ def main() -> int:
 
     md_jobs = [
         (SLIDES / "week-14-day-01-notes.md", "Presenter notes"),
+        (ROOT / "presentation-guide.md", "Presentation guide (all slides)"),
         (ROOT / "pre-class.md", "Pre-class message"),
         (ROOT / "instructor-checklist.md", "Instructor checklist"),
         (ROOT / "troubleshooting.md", "Troubleshooting"),
