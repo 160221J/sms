@@ -492,6 +492,10 @@ See `backend/migrations/001_init.sql`.
 
 ### Week 15 — Auth, frontend wiring, project completion
 
+**Day 1 materials (full kit):** [docs/week-15-day-01/](docs/week-15-day-01/) — slides, presenter notes, presentation guide, student handout, lab sheet, troubleshooting, homework. **Printable PDFs + editable PPTX:** [docs/week-15-day-01/pdf/](docs/week-15-day-01/pdf/)
+
+**Day 1 slides:** [docs/slides/week-15-day-01.html](docs/slides/week-15-day-01.html) · [presenter notes](docs/slides/week-15-day-01-notes.md)
+
 **SE / product**
 
 - JWT (HS256) as this repo does in `internal/utils/jwt.go`
