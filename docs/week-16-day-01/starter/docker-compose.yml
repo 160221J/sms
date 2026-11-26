@@ -1,0 +1,49 @@
+# Stretch only — not required to pass Week 16.
+# From docs/week-16-day-01/starter/:
+#   docker compose up --build
+#
+# Expects a Dockerfile in your backend/ (students add one) or adjust build context
+# to the repo root backend. This file is a teaching sketch.
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sms
+    ports:
+      - "5432:5432"
+    volumes:
+      - sms_pg:/var/lib/postgresql/data
+      # Mount your migration if present:
+      # - ../../../backend/migrations/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d sms"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    # Students: point build at their backend once a Dockerfile exists.
+    # build:
+    #   context: ../../../backend
+    image: golang:1.22
+    working_dir: /app
+    command: ["sleep", "infinity"] # placeholder — replace with real image/build
+    environment:
+      PORT: "8080"
+      JWT_SECRET: "dev-only-change-me"
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: sms
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  sms_pg:

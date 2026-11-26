@@ -517,6 +517,10 @@ See `backend/migrations/001_init.sql`.
 
 ### Week 16 — Review, Go design, refactor, demo
 
+**Day 1 materials (full kit):** [docs/week-16-day-01/](docs/week-16-day-01/) — slides, presenter notes, presentation guide, student handout, lab sheet, troubleshooting, homework. **Printable PDFs + editable PPTX:** [docs/week-16-day-01/pdf/](docs/week-16-day-01/pdf/)
+
+**Day 1 slides:** [docs/slides/week-16-day-01.html](docs/slides/week-16-day-01.html) · [presenter notes](docs/slides/week-16-day-01-notes.md)
+
 **SE**
 
 - Code review (instructor rubric below)
